@@ -1,6 +1,7 @@
 # promote-energy
 An editable html template with admin account
-Using [Polymer 2.0](https://www.polymer-project.org) and [firebase](https://firebase.google.com)
+Using [Polymer 2.0](https://www.polymer-project.org) and [firebase](https://firebase.google.com).
+
 A static template editable in text and picutres for sections and pages using admin account.
 
 admin login component:
