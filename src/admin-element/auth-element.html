@@ -1,0 +1,215 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/paper-card/paper-card.html">
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+
+<link rel="import" href="/bower_components/granite-bootstrap/granite-bootstrap.html">
+
+<script  src="../../server/auth.js"></script>
+
+
+<dom-module id="auth-element">
+    <template>
+        <style include="granite-bootstrap">
+
+
+            :host {
+
+                display: block;
+                --paper-input-container-label: {
+                    font-family: 'Poppins';
+                };
+
+            }
+            *{
+
+                font-family: 'Poppins';
+
+            }
+            .signinDiv{
+                background-image: url("../../images/1-01.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                height: 100%;
+                width: 100%;
+
+            }
+
+            paper-card{
+
+                margin: 0 auto;
+                @apply(--layout-vertical);
+                width: 30%;
+            }
+            .aboveForm{
+                background-color: #031829;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                text-align: center;
+            }
+            .aboveForm p{
+                margin: 0;
+                padding: 0;
+                font-size: 16px;
+                color: white;
+            }
+            .formDiv{
+                height: 100%;
+                width: 100%;
+                background-image: url("../../icons/2-04.png");
+                background-size: cover;
+            }
+            .signinForm{
+
+                padding: 20px 20px 35px 20px;
+                min-height: 160px;
+            }
+            paper-input{
+                --paper-input-container-color: #031829;
+                --paper-input-container-input-color: #031829;
+            }
+
+            paper-button{
+                margin-top: 20px;
+                margin-bottom: 20px;
+                float: right;
+            }
+            @media (max-width: 950px) {
+                paper-card{
+                    width: 60%;
+                }
+            }
+            @media (max-width: 550px) {
+                paper-card{
+                    width: 90%;
+                }
+            }
+
+            #toastWarning {
+                text-align: center;
+                --paper-toast-background-color: red;
+                --paper-toast-color: white;
+            }
+
+
+        </style>
+
+
+
+
+
+            <div class="signinDiv" style="padding: 150px 50px 100px;">
+            <paper-card >
+                <div class="aboveForm">
+                    <p>Admin <span style="color: #21CE41">Sign-In</span></p>
+                </div>
+                <div class="formDiv">
+                    <iron-form method="get">
+                        <form  method="get" class="signinForm">
+                            <paper-input id="mail" value="{{mail}}" label="email"  required auto-validate  error-message="{{errMsgEmail}}">
+                                <iron-icon icon="mail" style="color:#031829 " slot="prefix"></iron-icon>
+                            </paper-input>
+                            <paper-input id="password" value="{{password}}"  type="password" label="password" required auto-validate error-message="{{errMsgPass}}">
+                                <iron-icon icon="https" style="color:#031829 " slot="prefix"></iron-icon>
+                            </paper-input>
+                            <paper-button raised onclick="AuthElement.signinUserButt();" style="background-color:#031829; color: whitesmoke ">Login</paper-button>
+                        </form>
+                    </iron-form>
+                </div>
+            </paper-card>
+            </div>
+
+        <paper-toast id="signinToast" text="" ></paper-toast>
+    </template>
+
+    <script>
+        var e = "";
+        var p = "";
+        var mail;
+        var signinToast = "";
+        var authContext = "";
+        class AuthElement extends Polymer.Element {
+            static get is() { return 'auth-element'; }
+            static get properties() {
+                return {
+                    page: {
+                        type: Object
+                    },
+                    errMsgEmail: {
+                        type: String,
+                        notify: true,
+                        value: 'email required'
+                    },
+                    errMsgPass: {
+                        type: String,
+                        value: 'password required'
+                    }
+                };
+            }
+            ready() {
+                super.ready();
+                authContext = this;
+                mail = this.$.mail;
+                signinToast = this.$.signinToast;
+
+
+                e = this.$.mail;
+                p = this.$.password;
+
+                function chechUserStat(){
+
+                    var cok = document.cookie;
+                    console.log(cok);
+
+
+                    if (cok !== "") {
+                        window.location = "admin";
+
+                    }
+                }
+
+                console.log("ready");
+
+            }
+               static signinUserButt() {
+                signInUser(e.value, p.value, function (assignUserStat) {
+
+                        if (assignUserStat == 'auth/user-not-found') {
+                            mail.validate();
+                            console.log(mail);
+                            mail.value = "";
+
+                            signinToast.text = "Wrong Eamil, try again";
+                            signinToast.open();
+
+
+
+                            authContext.set('errMsgEmail', 'Wrong Eamil, try again');
+                            signinToast.text = "Wrong Eamil, try again";
+                            signinToast.open();
+                        } else if (assignUserStat == 'auth/wrong-password') {
+                            console.log(mail);
+                            p.value = "";
+                            authContext.set('errMsgPass', 'Wrong Password, try again');
+                            signinToast.text = "Wrong Password, try again";
+                            signinToast.open();
+                        }else{
+                            window.location.href="/admin";
+                        }
+                    });
+
+
+                };
+        }
+
+        window.customElements.define(AuthElement.is, AuthElement);
+    </script>
+</dom-module>

@@ -1,0 +1,243 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="/bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="/bower_components/app-layout/app-grid/app-grid-style.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+
+<link rel="import" href="/bower_components/granite-bootstrap/granite-bootstrap.html">
+<script src="../../server/navbar.js"></script>
+
+
+<dom-module id="footer-element">
+    <template>
+        <style include="granite-bootstrap">
+
+
+
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            li {
+                float: left;
+            }
+
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+
+            .dropdown {
+                float: left;
+
+            }
+
+            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+            }
+
+            .dropdown:hover .dropbtn {
+                border-bottom: inset;
+                text-decoration: none;
+                border-color: #21CE41;
+            }
+
+            .dropdown-content a {
+                float: none;
+                color: #fdfbff;
+                background-color: #031829;
+                text-decoration: none;
+                display: block;
+                text-align: center;
+
+            }
+
+            .dropdown-content a:hover {
+                background-color: #031829;
+
+            }
+
+            .dropdown:hover .dropdown-content{
+                display: block;
+                cursor: pointer;
+                max-width: 100px;
+            }
+
+            .navBarFont{
+                font-family: 'Kanit';
+            }
+
+            .sectionHeader{
+                font-family: 'Poppins';
+                font-weight: 700;
+            }
+
+            .contactUs{
+                /*font-family: 'Roboto';*/
+                /*font-weight: 500;*/
+                min-height: 200px;
+                background-color: white;
+                width: 100%;
+                background-size: cover;
+                padding-top: 30px;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+
+            .footerBack{
+                background-image: url("/icons/2-04.png");
+                background-size: auto;
+                height: 200px;
+
+            }
+            .logo{
+
+                width: 200px;
+
+            }
+            @media (max-width: 785px) {
+                ul li {
+                    display: inline-flex;
+                    overflow: auto;
+                    align-content: center;
+                    text-align: center;
+                    position: fixed;
+                }
+                .footerBack{
+                    background-size: auto;
+                    height: 450px;
+                    background-repeat: no-repeat;
+
+                }
+
+            }
+        </style>
+
+
+        <footer>
+            <div style="background-color: rgba(5,4,2,0.1);">
+                <div class="footerBack" style="margin-right: 0">
+
+
+                    <div  style="margin: 50px; float: right;">
+
+                        <!--footer buttons-->
+                                <ul class="resFoot" style="">
+                                    <template id="navbarLinks" is="dom-repeat" items="{{linksFooter}}" as="link">
+
+                                    <li  class="dropdown ">
+                                        <template is="dom-if" if="{{_isEqualTo(link.link, 'partners')}}">
+                                            <a class="dropbtn navBarFont" style="color: #031829" href="/public-partners">{{link.linkName}}</a>
+                                        </template>
+                                        <template is="dom-if" if="{{_notEqualTo(link.link, 'partners')}}">
+                                            <a class="dropbtn navBarFont" style="color: #031829" href="/#{{link.link}}" on-tap="_onTapAnchor">{{link.linkName}}</a>
+                                        </template>
+                                    </li>
+
+                                    </template>
+                                </ul>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </template>
+
+    <script>
+        var FooterContext;
+        class FooterElement extends Polymer.Element {
+            static get is() { return 'footer-element'; }
+            static get properties() {
+                return {
+                    page: {
+                        type: Object
+                    },
+                    linksFooter:{
+                        type: Array,
+                        notify: true
+                    },
+                    logoNavbarFooter:{
+                        type: Array,
+                        notify: true
+                    }
+                };
+            }
+            ready(){
+            super.ready();
+                FooterContext = this;
+
+                var navbarCallback = function (navbar) {
+                    this.set('linksFooter', navbar.static);
+                }.bind(this);
+                getNavbar(navbarCallback);
+
+                var navlogoCallback = function (navLogoCallBack) {
+                    this.set('logoNavbarFooter', navLogoCallBack);
+                }.bind(this);
+                getNavLogo(navlogoCallback);
+        }
+
+
+            _onTapAnchor(e) {
+                e.preventDefault();
+                var anchor = e.target.attributes.href.value.split("/")[1];
+                var view = this.parentNode.host.shadowRoot.querySelector(anchor);
+                this.animate(document.scrollingElement || document.documentElement
+                    , "scrollTop", "", Math.max( document.body.scrollHeight, document.body.offsetHeight,
+                        document.documentElement.clientHeight, document.documentElement.scrollHeight,
+                        document.documentElement.offsetHeight ), view.offsetTop, 500, true);
+//        view.scrollIntoView();
+            }
+            _isEqualTo(title, string) {
+                return title == string;
+            }
+            _notEqualTo(title, string) {
+                return title != string;
+            }
+            animate(elem, style, unit, from, to, time, prop) {
+                if (!elem) {
+                    return;
+                }
+                var start = new Date().getTime(),
+                    timer = setInterval(function () {
+                        var step = Math.min(1, (new Date().getTime() - start) / time);
+                        if (prop) {
+                            elem[style] = (from + step * (to - from))+unit;
+                        } else {
+                            elem.style[style] = (from + step * (to - from))+unit;
+                        }
+                        if (step === 1) {
+                            clearInterval(timer);
+                        }
+                    }, 25);
+                if (prop) {
+                    elem[style] = from+unit;
+                } else {
+                    elem.style[style] = from+unit;
+                }
+            }
+        }
+
+        window.customElements.define(FooterElement.is, FooterElement);
+    </script>
+</dom-module>

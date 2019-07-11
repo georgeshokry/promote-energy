@@ -1,0 +1,459 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="/bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="/bower_components/app-layout/app-grid/app-grid-style.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+
+<link rel="import" href="/bower_components/granite-bootstrap/granite-bootstrap.html">
+
+<script src="../../server/navbar.js"></script>
+
+
+<dom-module id="navbar-element">
+    <template>
+        <style include="granite-bootstrap">
+
+            app-toolbar{
+                color: white;
+                box-shadow: 0px 1px 5px #000000;
+                z-index: 10;
+                min-height: 100px;
+                padding: 0;
+            }
+            paper-listbox{
+                --paper-listbox-color:gray;
+            }
+            paper-listbox .iron-selected a{
+                color: white;
+                background-color: #031829 !important;
+            }
+            paper-listbox{
+                color: white;
+                background-color: #031829 !important;
+                font-weight: lighter;
+            }
+            paper-listbox a{
+                text-decoration: none;
+                color: #031829;
+                cursor: default;
+                font-weight: lighter;
+                width: 100%;
+                padding: 15px;
+            }
+            paper-item:not(:first-child){
+                box-shadow: 0 2px 2px -2px gray;
+            }
+            paper-item{
+                padding: 0;
+            }
+            paper-progress {
+                display: block;
+                width: 100%;
+            }
+            app-drawer-layout{
+                background-color: #f0f0f0;
+            }
+
+
+            app-drawer {
+                box-shadow: -1px 0px 10px #888888;
+                z-index: 5;
+                top: 100px;
+                transition-duration: 10ms !important;
+                height: 100%;
+                --app-drawer-content-container: {
+                    padding-top: 30px;
+                };
+            }
+            :host {
+                --app-drawer-width:  200px;
+                --app-grid-columns: 3;
+                --app-primary-color: #031829;
+
+
+            }
+            app-header{
+                background-color: var(--app-primary-color);
+            }
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            li {
+                float: left;
+            }
+
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            .navbar {
+                overflow: hidden;
+                background-color: #031829;
+                width: 50%;
+            }
+
+            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            .dropdown {
+                float: left;
+
+            }
+
+            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 0px 20px;
+                background-color: inherit;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                border-bottom: inset;
+                border-color: #21CE41;
+                text-decoration: none;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                min-width: 160px;
+                box-shadow: 2px 8px 16px 0 rgba(255, 255, 255, 0.2);
+                z-index: 1;
+            }
+
+            .dropdown-content a {
+                float: none;
+                color: #fdfbff;
+                background-color: #031829;
+                text-decoration: none;
+                display: block;
+                text-align: center;
+
+            }
+
+            .dropdown-content a:hover {
+                background-color: #031829;
+
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+                cursor: pointer;
+                max-width: 100px;
+                opacity: 1;
+            }
+            .logo{
+
+                width: 200px;
+                margin-right: 50px;
+            }
+
+
+
+
+
+
+            .dropdownFont{
+                font-family: 'Poppins';
+                font-weight: 100;
+                font-size: 15px;
+            }
+
+            .navBarFont{
+                font-family: 'Kanit';
+            }
+
+
+
+
+
+
+
+
+
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #031829;
+                min-width: 120px;
+                box-shadow: 0px 8px 16px 0px rgba(168, 168, 168, 0.2);
+                padding: 12px 16px;
+                z-index: 1;
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+                opacity: 1;
+            }
+
+
+
+
+
+        </style>
+        <!-- app-location binds to the app's URL -->
+        <app-location route="{{route}}"></app-location>
+
+        <!-- this app-route manages the top-level routes -->
+        <app-route
+                route="{{route}}"
+                pattern="/:view"
+                data="{{routeData}}"
+                tail="{{subroute}}"></app-route>
+
+
+        <iron-media-query query="(min-width: 1000px)" query-matches="{{bigscreen}}"></iron-media-query>
+        <iron-media-query query="(max-width: 1000px)" query-matches="{{smallscreen}}"></iron-media-query>
+
+        <template is="dom-if" if="{{smallscreen}}">
+            <app-header id="headerMob" fixed condenses slot="header" class="navBarFont" style="z-index: 1">
+
+                <app-toolbar style="display: var(--layout-vertical-_display);box-shadow: 0px 0px 0px #000000">
+                    <!--logo goes here-->
+
+                    <!--start of navbar content-->
+
+                    <div style="display: inline-block;width: 80%;">
+                        <a href="/">
+                        <img src$='{{logoNavbar}}' class="logo">
+                        </a>
+                    </div>
+                    <paper-icon-button id="trigger" aria-controls="collapse" on-click="toggle" icon="menu" style="display: inline-block;">Expand</paper-icon-button>
+
+                    <iron-collapse id="collapse" tabindex="0" role="group" aria-hidden="true" aria-expanded="false" class="iron-collapse-closed" style="transition-property: max-height; transition-duration: 0s; max-height: 0px;">
+                        <slot>
+
+                            <!--start of navbar content-->
+                            <template id="navbarLinksMob" is="dom-repeat" items="{{links}}" as="linkMob">
+                                <div class="row no-gutters" style=" padding-right: 20px; max-height: 50px; ">
+                                    <div class="col-3 col-md-2">
+                                        <div class="dropdown " style="padding-top: 0">
+                                            <ul class=" section table-of-contents" style="display: inline-block; float: right;">
+                                                <li>
+                                                    <template is="dom-if" if="{{_isEqualTo(linkMob.link, 'partners')}}">
+                                                        <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/public-partners">{{linkMob.linkName}}</a>
+                                                    </template>
+                                                    <template is="dom-if" if="{{_notEqualTo(linkMob.link, 'partners')}}">
+                                                        <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/#{{linkMob.link}}" on-tap="_onTapAnchorMobile">{{linkMob.linkName}}</a>
+                                                    </template>
+                                                </li>
+                                                <hr style="color: #21CE41; padding-bottom: 10px">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+
+                            <!--dropdown content for pages-->
+                            <div class="dropdown " id="moreMobile" style="padding-left: 20px; background-color: #031829; display: inline-block">
+                                <a style="cursor: pointer">More<paper-icon-button icon="arrow-drop-down" ></paper-icon-button></a>
+                                <div class="dropdown-content dropdownFont">
+                                    <template is="dom-repeat" items="{{specialLink}}" as="specialLinks">
+                                        <a href='/page/page/{{specialLinks.link}}'>{{specialLinks.linkName}} </a>
+
+                                        <hr style="background-color: #21CE41; width: 90px; margin-left: 0;margin-top: 0">
+                                    </template>
+                                </div>
+                            </div>
+
+                        </slot>
+                    </iron-collapse>
+                </app-toolbar>
+
+
+
+            </app-header>
+        </template>
+
+        <template is="dom-if" if="{{bigscreen}}">
+            <app-header id="header" fixed condenses slot="header" class="navBarFont" style="z-index: 1">
+
+                <app-toolbar>
+                    <!--logo goes here-->
+
+                    <div >
+                        <a href="/">
+                        <img src$='{{logoNavbar}}' class="logo" >
+                        </a>
+                    </div>
+
+                    <div style="background-image: url(/images/logo.png)"  class="logo">
+
+                    </div>
+
+
+                    <!--start of navbar content-->
+
+
+
+                    <template id="navbarLinks" is="dom-repeat" items="{{links}}" as="link">
+                        <div class="" style=" padding-right: 10px; max-height: 50px">
+                            <div class="col-3 col-md-2">
+                                <div class="dropdown " style="padding-top: 0">
+                                    <ul class=" section table-of-contents" style="display: inline-block; float: right;">
+                                        <li>
+                                            <template is="dom-if" if="{{_isEqualTo(link.link, 'partners')}}">
+                                                <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/public-partners">{{link.linkName}}</a>
+                                            </template>
+                                            <template is="dom-if" if="{{_notEqualTo(link.link, 'partners')}}">
+                                                <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/#{{link.link}}" on-tap="_onTapAnchor">{{link.linkName}}</a>
+                                            </template>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    </template>
+
+                    <!--dropdown content for pages-->
+                    <div class="dropdown " id="more">
+                        <a style="cursor: pointer">More<paper-icon-button icon="arrow-drop-down" ></paper-icon-button></a>
+                        <div class="dropdown-content dropdownFont" >
+
+
+                            <template is="dom-repeat" items="{{specialLink}}" as="specialLinks">
+                                <a href='/page/page/{{specialLinks.link}}'>{{specialLinks.linkName}} </a>
+                                <hr style="background-color: #21CE41; width: 90px; margin-left: 0;margin-top: 0">
+                            </template>
+                        </div>
+                    </div>
+
+
+                </app-toolbar>
+
+            </app-header>
+        </template>
+
+
+    </template>
+
+    <script>
+        var navBarContext = "";
+        class NavbarElement extends Polymer.Element {
+            static get is() { return 'navbar-element'; }
+            static get properties() {
+                return {
+                    page: {
+                        type: Object
+                    },links:{
+                        type: Array,
+                        notify: true
+                    },
+                    specialLink:{
+                        type: Array,
+                        notify: true
+                    },
+                    logoNavbar:{
+                        type: Array,
+                        notify: true
+                    }
+                };
+            }
+            ready(){
+                super.ready();
+                navBarContext = this;
+
+                var navbarCallback = function (navbar) {
+                    this.set('links', navbar.static);
+                    this.set('specialLink', navbar.special);
+                }.bind(this);
+                getNavbar(navbarCallback);
+
+                var navlogoCallback = function (navLogoCallBack) {
+                    this.set('logoNavbar', navLogoCallBack);
+                }.bind(this);
+                getNavLogo(navlogoCallback);
+            }
+
+            toggle(){
+                this.shadowRoot.querySelector('#collapse').toggle();
+            }
+
+            _onTapAnchor(e) {
+                e.preventDefault();
+                var anchor = e.target.attributes.href.value.split("/")[1];
+                console.log(anchor);
+                var view = this.parentNode.host.shadowRoot.querySelector(anchor);
+                this.animate(document.scrollingElement || document.documentElement, "scrollTop", "", 0, view.offsetTop, 500, true);
+//        view.scrollIntoView();
+            }
+
+            _onTapAnchorMobile(e) {
+//                var spl = window.location.pathname;
+//                var split = spl.split("/", 1);
+//                console.log(split);
+//                if(split == "/page" || split == "/public-partners"){
+//                window.location = "/";
+//                }else {
+//                    e.preventDefault();
+                    var anchor = e.target.attributes.href.value.split("/")[1];
+                    console.log(anchor);
+                    var view = this.parentNode.host.shadowRoot.querySelector(anchor);
+                    this.animate(document.scrollingElement || document.documentElement, "scrollTop", "", 0, view.offsetTop, 500, true);
+//                }
+////        view.scrollIntoView();
+            }
+            _isEqualTo(title, string) {
+                return title == string;
+            }
+            _notEqualTo(title, string) {
+                return title != string;
+            }
+            animate(elem, style, unit, from, to, time, prop) {
+                if (!elem) {
+                    return;
+                }
+                var start = new Date().getTime(),
+                    timer = setInterval(function () {
+                        var step = Math.min(1, (new Date().getTime() - start) / time);
+                        if (prop) {
+                            elem[style] = (from + step * (to - from))+unit;
+                        } else {
+                            elem.style[style] = (from + step * (to - from))+unit;
+                        }
+                        if (step === 1) {
+                            clearInterval(timer);
+                        }
+                    }, 25);
+                if (prop) {
+                    elem[style] = from+unit;
+                } else {
+                    elem.style[style] = from+unit;
+                }
+            }
+        }
+
+        window.customElements.define(NavbarElement.is, NavbarElement);
+    </script>
+</dom-module>

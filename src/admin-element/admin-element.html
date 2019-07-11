@@ -1,0 +1,1679 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../../bower_components/l2t-paper-slider/l2t-paper-slider.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-shared-styles.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/web-animations-js/web-animations.min.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+
+<link rel="import" href="../../bower_components/granite-bootstrap/granite-bootstrap.html">
+<link rel="import" href="/src/public-element/navbar-element.html">
+<link rel="import" href="/src/admin-element/footer-element.html">
+
+<script src="../../server/auth.js"></script>
+<script src="../../server/navbar.js"></script>
+<script src="../../server/slider.js"></script>
+<script src="../../server/sections.js"></script>
+<script src="../../server/services.js"></script>
+<script src="../../server/partners.js"></script>
+<script src="../../server/pages.js"></script>
+
+
+<dom-module id="admin-element">
+    <template>
+        <style include="granite-bootstrap">
+
+
+            app-toolbar{
+                color: white;
+                box-shadow: 0px 1px 5px #000000;
+                z-index: 10;
+                min-height: 100px;
+                padding: 0;
+            }
+            paper-listbox{
+                --paper-listbox-color:gray;
+            }
+            paper-listbox .iron-selected a{
+                color: white;
+                background-color: #031829 !important;
+            }
+            paper-listbox{
+                color: white;
+                background-color: #031829 !important;
+                font-weight: lighter;
+            }
+            paper-listbox a{
+                text-decoration: none;
+                color: #031829;
+                cursor: default;
+                font-weight: lighter;
+                width: 100%;
+                padding: 15px;
+            }
+            paper-item:not(:first-child){
+                box-shadow: 0 2px 2px -2px gray;
+            }
+            paper-item{
+                padding: 0;
+            }
+            paper-progress {
+                display: block;
+                width: 100%;
+            }
+            app-drawer-layout{
+                background-color: #f0f0f0;
+            }
+
+
+            app-drawer {
+                box-shadow: -1px 0px 10px #888888;
+                z-index: 5;
+                top: 100px;
+                transition-duration: 10ms !important;
+                height: 100%;
+                --app-drawer-content-container: {
+                    padding-top: 30px;
+                };
+            }
+            :host {
+                --app-drawer-width:  200px;
+                --app-grid-columns: 3;
+                --app-primary-color: #031829;
+
+            }
+            app-header{
+                background-color: var(--app-primary-color);
+            }
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            li {
+                float: left;
+            }
+
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            .navbar {
+                overflow: hidden;
+                background-color: #031829;
+                width: 50%;
+            }
+
+            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            .dropdown {
+                float: left;
+
+            }
+
+            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 0px 20px;
+                background-color: inherit;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                /*border-bottom: inset;*/
+                /*border-color: #21CE41;*/
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                min-width: 160px;
+                box-shadow: 2px 8px 16px 0 rgba(255, 255, 255, 0.2);
+                z-index: 1;
+            }
+
+            .dropdown-content a {
+                float: none;
+                color: #fdfbff;
+                background-color: #031829;
+                text-decoration: none;
+                display: block;
+                text-align: center;
+
+            }
+
+            .dropdown-content a:hover {
+                background-color: #031829;
+
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+                cursor: pointer;
+                max-width: 100px;
+                opacity: 1;
+            }
+            .logo{
+
+                width: 200px;
+            }
+
+
+
+            .custom {
+                /*--paper-slide-width: 100%;*/
+                --paper-slide-height: 550px;
+                --paper-slide-dot: rgba(1, 96, 100, 0.8);
+                --paper-slide-dot-selected: rgb(255, 255, 255);
+
+            }
+
+            .dynamicImage{
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: 50% 50%;
+                height: 100%;
+            }
+
+
+            .dropdownFont{
+                font-family: 'Poppins';
+                font-weight: 100;
+                font-size: 15px;
+            }
+
+            .navBarFont{
+                font-family: 'Kanit';
+            }
+
+
+            .sliderTitle {
+                font-family: 'Roboto';
+                color: white;
+
+                font-size: 70px;
+                font-weight: 400;
+            }
+
+            .sliderBody {
+                font-size: 25px;
+                color: white;
+                font-family: 'Roboto';
+                font-weight: 100;
+
+            }
+
+            .sliderContent {
+                word-break: break-all;
+                padding-top: 50px;
+            }
+
+            .aboutUs{
+                min-height: 200px;
+                background-image: url("../../icons/2-04.png");
+                width: 100%;
+                background-size: cover;
+                /*padding-top: 30px;*/
+                margin-bottom: 0;
+                margin-top: 50px;
+
+            }
+
+            .services{
+                /*font-family: 'Roboto';*/
+                /*font-weight: 500;*/
+                min-height: 200px;
+                background-color: #dfdfdf;
+                width: 100%;
+                background-size: cover;
+                padding-top: 30px;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+
+            .projects{
+                /*font-family: 'Roboto';*/
+                /*font-weight: 500;*/
+                min-height: 500px;
+                background-image: url("/images/Untitled-1-01.jpg");
+                width: 100%;
+                background-size: cover;
+                padding-top: 30px;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+
+
+
+            .utilityTools{
+                position: relative;
+                display: inline-block;
+                max-width: 70px;
+                max-height: 50px;
+                background-color: rgba(223, 212, 212, 0.56);
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 0;
+                box-shadow: #aaaaaa;
+            }
+
+            .cardReform{
+                background-color: #031829;
+                align-items: center;
+                max-width: 200px;
+                text-align: center;
+                padding: 20px
+            }
+
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #031829;
+                min-width: 120px;
+                box-shadow: 0px 8px 16px 0px rgba(168, 168, 168, 0.2);
+                padding: 12px 16px;
+                z-index: 1;
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+
+            }
+
+            .contactUs{
+                /*font-family: 'Roboto';*/
+                /*font-weight: 500;*/
+                min-height: 200px;
+                background-color: white;
+                width: 100%;
+                background-size: cover;
+                padding-top: 30px;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+            @media (max-width: 785px) {
+                .sliderTitle{
+                    word-break: break-all;
+                    font-size: 20px;
+                }
+                .sliderBody{
+                    word-break: break-all;
+                    font-size: 15px;
+                }
+
+                .resCards{
+                    margin-left: 50px;
+                }
+            }
+        </style>
+
+        <!-- app-location binds to the app's URL -->
+        <app-location route="{{route}}"></app-location>
+
+        <!-- this app-route manages the top-level routes -->
+        <app-route
+                route="{{route}}"
+                pattern="/:view"
+                data="{{routeData}}"
+                tail="{{subroute}}"></app-route>
+
+        <iron-media-query query="(min-width: 1000px)" query-matches="{{bigscreen}}"></iron-media-query>
+        <iron-media-query query="(max-width: 1000px)" query-matches="{{smallscreen}}"></iron-media-query>
+
+        <template is="dom-if" if="{{smallscreen}}">
+            <app-header id="headerMob" fixed condenses slot="header" class="navBarFont" style="z-index: 1">
+
+                <app-toolbar style="display: var(--layout-vertical-_display);box-shadow: 0px 0px 0px #000000">
+                    <!--logo goes here-->
+
+                    <div style="display: inline-block;width: 80%;">
+                        <a href="/admin">
+                        <img src$='{{logoNavbar}}' class="logo">
+                        </a>
+                        <paper-icon-button  style="width: 30px; height: 30px; color: blue;" icon="create"  id="LogoSmall" on-click="editAppLogo"></paper-icon-button>
+                        <paper-tooltip for="LogoSmall"  position="bottom" offset="0">Edit Button </paper-tooltip>
+                    </div>
+                    <!--start of navbar content-->
+                    <paper-icon-button id="trigger" aria-controls="collapse" on-click="toggle" icon="menu" style="display: inline-block;">Expand</paper-icon-button>
+
+                    <iron-collapse id="collapse" tabindex="0" role="group" aria-hidden="true" aria-expanded="false" class="iron-collapse-closed" style="transition-property: max-height; transition-duration: 0s; max-height: 0px;">
+                        <slot>
+                    <template id="navbarLinks" is="dom-repeat" items="{{links}}" as="link">
+                        <div class="row no-gutters" style=" padding-right: 20px; max-height: 50px; ">
+                            <div class="col-3 col-md-2">
+                                <div class="dropdown " style="padding-top: 0">
+                                    <ul class=" section table-of-contents" style="display: inline-block; float: right;">
+                                        <li>
+                                            <template is="dom-if" if="{{_isEqualTo(link.linkName, 'partners')}}">
+                                                <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/partners">{{link.linkName}}</a>
+                                            </template>
+                                            <template is="dom-if" if="{{_notEqualTo(link.linkName, 'partners')}}">
+                                                <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/admin/#{{link.link}}" on-tap="_onTapAnchor">{{link.linkName}}</a>
+                                            </template>
+                                            <paper-icon-button  style="width: 30px; height: 30px; color: blue;" icon="create"  id="edit{{link.linkName}}" on-click="editBut"></paper-icon-button>
+                                            <paper-tooltip for="edit{{link.linkName}}"  position="bottom" offset="0">Edit Button </paper-tooltip>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    </template>
+
+
+                    <!--dropdown content for pages-->
+                    <div class="dropdown ">
+                        <a style="cursor: pointer">More<paper-icon-button icon="arrow-drop-down" ></paper-icon-button></a>
+                        <div class="dropdown-content dropdownFont">
+                            <template is="dom-repeat" items="{{specialLink}}" as="specialLinks">
+                                <a href$='{{"specialLinks.link"}}'>{{specialLinks.linkName}} </a>
+
+
+                                        <!--<paper-icon-button  style="width: 30px; height: 30px; color: blue;" icon="create"  id="" on-click="editBut"></paper-icon-button>-->
+                                        <!--<paper-tooltip for="edit{{specialLinks.linkName}}"  position="bottom" offset="0">Edit Button </paper-tooltip>-->
+
+
+                                        <paper-icon-button  style="width: 30px; color: red;" icon="delete" title="Delete" id="" on-click="deleteBut"></paper-icon-button>
+                                        <paper-tooltip for="del{{specialLinks.linkName}}"  position="bottom" offset="0">Delete Page</paper-tooltip>
+
+
+                                <hr style="background-color: #21CE41; width: 90px; margin-left: 0;margin-top: 0">
+                            </template>
+                        </div>
+                    </div>
+
+                    <paper-button on-click="exitAdmin" id="exitButton" dialog-confirm autofocus  style="background-color: red; padding: 1px">Exit </paper-button>
+                        </slot>
+                    </iron-collapse>
+                </app-toolbar>
+
+
+
+            </app-header>
+        </template>
+
+        <template is="dom-if" if="{{bigscreen}}">
+            <app-header id="header" fixed condenses slot="header" class="navBarFont" style="z-index: 1">
+
+                <app-toolbar>
+                    <!--logo goes here-->
+
+                    <div style="padding-right: 5%">
+                        <a href="/admin">
+                        <img src$='{{logoNavbar}}' class="logo" style="padding: 0; ">
+                        </a>
+
+                    </div>
+                    <paper-icon-button  style="size: 30px; color: blue;" icon="create"  id="LogoBig" on-click="editAppLogoDialog"></paper-icon-button>
+                    <paper-tooltip for="LogoBig"  position="bottom" offset="0">Edit Logo </paper-tooltip>
+                    <!--start of navbar content-->
+
+
+
+                    <template id="navbarLinks" is="dom-repeat" items="{{links}}" as="link">
+                        <div class=" " style="max-height: 50px">
+                            <div class="col-3 col-md-2">
+                                <div class="dropdown " style="padding-top: 0">
+                                    <div class=" " style="display: inline-block; float: right;">
+                                        <ul class=" section table-of-contents" style="display: inline-block; float: right;">
+                                            <li>
+                                                <template is="dom-if" if="{{_isEqualTo(link.link, 'partners')}}">
+                                                    <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/partners">{{link.linkName}}</a>
+                                                </template>
+                                                <template is="dom-if" if="{{_notEqualTo(link.link, 'partners')}}">
+                                                    <a style="text-align: center;cursor: pointer" class="dropbtn navBarFont dropdown" href="/admin/#{{link.link}}" on-tap="_onTapAnchor">{{link.linkName}}</a>
+                                                </template>
+                                            </li>
+                                        </ul>
+
+                                            <paper-icon-button  style="size: 20px; color: blue;" icon="create"  id="edit{{link.linkName}}" on-click="editBut"></paper-icon-button>
+                                            <paper-tooltip for="edit{{link.linkName}}"  position="bottom" offset="0">Edit Button</paper-tooltip>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                    </template>
+
+                    <!--dropdown content for pages-->
+                    <div class="dropdown ">
+                        <a style="cursor: pointer">More<paper-icon-button icon="arrow-drop-down" ></paper-icon-button></a>
+                        <div class="dropdown-content dropdownFont" >
+                            <div style="padding-left: 25px">
+                                <paper-icon-button  style="size: 20px; color: blue;" icon="add-circle"  id="addButton" on-click="addNewLinkDialog"></paper-icon-button>
+                                <paper-tooltip for="addButton"  position="bottom" offset="0">Add New Page</paper-tooltip>
+                            </div>
+
+                            <template is="dom-repeat" items="{{specialLink}}" as="specialLinks">
+                                <a href='/pageadmin/page/{{specialLinks.link}}'>{{specialLinks.linkName}}</a>
+
+                                <!--<paper-icon-button  style="width: 30px; height: 30px; color: blue;" icon="create"  id="editspecialLinks.linkName" on-click="editBut"></paper-icon-button>-->
+                                <!--<paper-tooltip for="editspecialLinks.linkName"  position="bottom" offset="0">Edit Page </paper-tooltip>-->
+
+
+                                <paper-icon-button  style="width: 30px; color: red;" icon="delete" title="Delete" id="del" on-click="deleteBut"></paper-icon-button>
+                                <paper-tooltip for="del"  position="bottom" offset="0">Delete Page</paper-tooltip>
+                                <hr style="background-color: #21CE41; width: 90px; margin-left: 0;margin-top: 0">
+                            </template>
+                        </div>
+                    </div>
+
+                    <paper-button on-click="exitAdmin" id="exitButton" dialog-confirm autofocus style="background-color: red; padding: 1px" >Exit </paper-button>
+                </app-toolbar>
+
+            </app-header>
+        </template>
+
+        <!-- slider content-->
+
+        <div style="background-color: #0a3142;">
+            <!--<div style="border: 2px solid blue; width: 100%">-->
+            <l2t-paper-slider  auto-progress slide-duration="10" class="custom" total-slides="{{slides.length}}">
+                <template id="sliderContent" is="dom-repeat" items="{{slides}}" as="slide">
+                    <paper-slide class="dynamicImage" style$='background-image: url("{{slide.imageUrl}}")'>
+                        <div  style="size: 50px">
+
+                                <paper-icon-button  style="width: 50px; height: 50px; color: blue;" icon="create"  id="editPic{{slide.sliderKey}}" on-click="editSlidePicDialog"></paper-icon-button>
+                                <paper-tooltip for="editPic{{slide.sliderKey}}"  position="right" offset="0" style="z-index: 150">Edit Slide Pic </paper-tooltip>
+
+
+                                <paper-icon-button  style="width: 50px; height: 50px; color: red;" icon="delete" title="Delete" id="{{slide.sliderKey}}" on-click="deleteSlide"></paper-icon-button>
+                                <paper-tooltip for="{{slide.sliderKey}}"  position="right" offset="0">Delete Slide </paper-tooltip>
+
+                        </div>
+                        <div class="sliderContent" style="max-width: 50px; max-height: 50px;">
+                            <div class="row no-gutters" style="padding-left: 40px;">
+                                <div class="col-12 col-sm-6 col-md-8">
+
+
+                                <p class="sliderTitle" style="word-break: break-all">{{slide.title.en}}<paper-icon-button  style="width: 50px; height: 50px; color: blue;" icon="create"  on-click="editTitleDialog"></paper-icon-button></p>
+                                    <paper-tooltip for="editTitle{{slide.sliderKey}}1"  position="right" offset="0">Edit Slide Title</paper-tooltip>
+
+                                    <p class="sliderBody" style="word-break: break-all">{{slide.content.en}}<paper-icon-button  style="width: 50px; height: 50px; color: blue;" icon="create"  on-click="editBodyDialog"></paper-icon-button></p>
+                                    <paper-tooltip for="editBody{{slide.sliderKey}}2"  position="right" offset="0">Edit Slide Content</paper-tooltip>
+
+                                    <paper-button style="color: #21CE41; background-color: #0a3142; font-size: 15px; font-weight: 500; width:150px; ">{{slide.link.en}}<paper-icon-button  style="size: 50px; color: blue;" icon="create"  on-click="editButtonDialog"></paper-icon-button></paper-button>
+                                    <paper-tooltip for="editButton{{slide.sliderKey}}3"  position="right" offset="0">Edit Slide Button</paper-tooltip>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </paper-slide>
+
+                </template>
+
+
+            </l2t-paper-slider>
+
+
+
+                <a>
+                    <paper-icon-button  style="size: 50px; color: blue;" icon="add-box"  id="addSlidePic" on-click="addNewSlideDialog"></paper-icon-button>
+                    <paper-tooltip position="right" for="addSlidePic"  offset="0">Add New Slide</paper-tooltip>
+                </a>
+
+
+        </div>
+
+
+        <!--about us section-->
+        <section class="" id="AboutUs">
+            <div class="row no-gutters textData aboutUs">
+
+                <template id="sectionSection" is="dom-repeat" items="{{sec}}" as="secs">
+                <div class="col-6 col-md-3 " style="padding-left: 50px; font-size: 50px">
+
+                    <h1 style="font-family: 'Poppins'; font-weight: 600">
+                        {{secs.title.en}}
+                        <!--<paper-icon-button  style="size: 30px; color: blue;" icon="create"  id="aboutTitle" on-click="editTitleAbout"></paper-icon-button>-->
+                        <!--<paper-tooltip for="aboutTitle"  position="right" offset="0">Edit Title </paper-tooltip>-->
+                    </h1>
+                    <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-8">
+
+                    <p style="font-size: 18px; font-family: 'Roboto'; font-weight: 600; padding-left: 50px">
+                       {{secs.content.en}}
+                        <paper-icon-button  style="size: 30px; color: blue;" icon="create"  id="aboutContent" on-click="editContentAbout"></paper-icon-button>
+                        <paper-tooltip for="aboutContent"  position="bottom" offset="0">Edit Content</paper-tooltip>
+                    </p>
+
+
+
+
+                </div>
+                </template>
+
+            </div>
+        </section>
+
+        <!--services section-->
+        <section class="services" id="services">
+            <div class="row no-gutters" style="padding-bottom: 30px; ">
+                <div class="col-6 col-md-3" style="font-family: 'Poppins'; padding-left: 50px; font-weight: 600; font-size: 50px">
+                    <h1 style="font-family: 'Poppins'; font-weight: 600">
+                       Services
+                    </h1>
+                    <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+                </div>
+
+                <div class="col-md-9" style=" text-align: center;">
+                <template id="serviceSection" is="dom-repeat" items="{{service}}" as="services">
+                    <div class="resCards" style=" display: inline-block; margin-right: 0; padding-top: 0px; font-family: 'Poppins'; font-weight: 600; padding-left: 10px; padding-bottom: 10px">
+
+
+                        <div class="" style="font-size: 30px; padding-right: 10px">
+                            <!--<div style="width: 400px">-->
+                            <div class=" " style="height: 440px; border-radius: 0; background-color: #031829;  width: 280px">
+                        <img class="" src={{services.image}} style="height: 100px; width: 100px; margin-top: 10px; margin-bottom: 20px;">
+                        <paper-icon-button id="image" style="size: 1px; color: blue;" icon="create" on-click="seviceImageDialog"></paper-icon-button>
+                        <paper-tooltip for="image"  position="bottom" offset="0">Edit Pic</paper-tooltip>
+                        <div class="" style="padding: 5px; text-align: center">
+                            <h4 class="" style="color: #21CE41; margin-bottom: 0; font-weight: 300">{{services.title.en}}<paper-icon-button id="title"  style="size: 10px; color: blue;" icon="create"   on-click="seviceTitleDialog"></paper-icon-button></h4>
+                            <paper-tooltip for="title"  position="bottom" offset="0">Edit Title</paper-tooltip>
+
+                            <div style="font-weight: 400; font-size: 16px; text-align: center; color: white; margin-bottom: 0" inner-h-t-m-l="{{services.content.en}}">
+
+                            </div>
+
+
+                            <paper-icon-button id="content"  style="size: 1px; color: blue;" icon="create"  on-click="seviceBodyDialog"></paper-icon-button>
+                            <paper-tooltip for="content"  position="bottom" offset="0">Edit Content</paper-tooltip>
+                            <br>
+
+
+                    </div>
+
+                </div>
+                            <div  style="height: 80px; border-radius: 0; background-color: #031829; margin-top: 0; padding-top: 0">
+                                <paper-button raised style="color: #031829; background-color: #21CE41; font-size: 15px; font-weight: 500">{{services.link.en}}<paper-icon-button id="button" style="size: 30px; color: blue;" icon="create"  on-click="seviceButtonDialog"></paper-icon-button></paper-button>
+                                <paper-tooltip for="button"  position="bottom" offset="0">Edit Button</paper-tooltip>
+                            </div>
+                        </div>
+                </div>
+                </template>
+            </div>
+            </div>
+        </section>
+
+        <!--projects & missions section-->
+        <section class="projects" id="Projects">
+            <div class="row no-gutters" style="padding-bottom: 30px">
+
+                <div class="col-6 col-md-3" style="font-family: 'Poppins'; padding-left: 50px; font-weight: 600; font-size: 50px">
+                    <h1 style="font-family: 'Poppins'; font-weight: 600; color: white;">
+                        {{projects.title.en}}
+                    </h1>
+                    <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-8" >
+                    <div style="position: relative">
+
+                        <img src="{{projects.imageUrl}}" style="max-height: 450px; width: 100%;">
+                    </div>
+                </div>
+               <paper-icon-button id="projectsImage" style="size: 30px; color: blue;" icon="create"  on-click="editProjectsDialog"></paper-icon-button>
+                <paper-tooltip for="projectsImage"  position="bottom" offset="0">Edit Pic</paper-tooltip>
+            </div>
+        </section>
+
+        <!--contact us & footer section-->
+        <section id="ContactUs" class="section scrollspy">
+            <div class="row no-gutters contactUs" style="padding-bottom: 50px; ">
+                <div class="col-6 col-md-3" style="font-family: 'Poppins'; padding-left: 50px; font-weight: 600; font-size: 50px">
+                    <h1 style="font-family: 'Poppins'; font-weight: 600">
+                        Contact <span style="color: #21CE41">Us</span>
+                    </h1>
+                    <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+                </div>
+
+                <!--////////////START OF CONTACT US FORM///////////-->
+
+
+                <div class="col-12 col-sm-6 col-md-3" style="margin-right: 10px; padding-left: 50px; padding-right: 30px">
+                    <paper-input value="{{contact.personname}}" name="name" label="Name" required auto-validate allowed-pattern="[a-zA-Z]"> error-message="required!"></paper-input>
+
+                    <paper-input value="{{contact.phone}}" name="phone"  label="Phone" required  auto-validate allowed-pattern="^[0-9]*$" error-message="Enter Phone Number"></paper-input>
+
+                    <paper-input value="{{contact.email}}" name="email" label="Mail Address" required auto-validate  pattern="^(.)+@[a-z A-Z _]+?\.[a-zA-Z]{2,3}$" error-message="Enter Mail Address"></paper-input>
+                </div>
+
+
+                <div class="textAreaDiv" style="margin-right: 10px; padding-right: 30px; max-width: 500px; max-height: 135px; margin-top: 50px; ">
+                    <textarea  cols="50" rows="25" style="width: 400px;  height: 130px; resize:none;" value="{{contact.message}}" name="message" char-counter  maxlength="500" required placeholder="Message..."></textarea>
+
+                    <!--////////////START OF CONTACT US FORM///////////-->
+
+
+                    <paper-button on-click="contact" raised style="color: #031829; background-color: #21CE41; font-size: 13px; font-weight: 600">Send</paper-button>
+                    <!--</form>-->
+                </div>
+            </div>
+        </section>
+       <footer-element>
+
+       </footer-element>
+
+<!--///////////////////////STARTING OF ALL DIALOGS///////////////////-->
+
+        <!--dialog for adding new button in navbar-->
+        <paper-dialog id="addLinkDialog" with-backdrop >
+            <h5 style="text-align: center; margin-top: 30px; " >Adding New <span style="color: #21CE41;">Page</span></h5>
+            <!--<hr style="background-color: #21CE41; width: 90px; align-items: center">-->
+            <div style="margin-bottom: 5px">
+                <!--<paper-input label="Button Title" id="navTitle"></paper-input>-->
+                <paper-input label="Title" id="newTitleButt"></paper-input>
+                <paper-input label="Arabic Title" id="newArabicButt"></paper-input>
+                <paper-input label="Page Content" id="newContent"></paper-input>
+                <paper-input label="Page Arabic Content" id="newContentArabic"></paper-input>
+                <paper-input  id="newpageImage"  type="file" accept="image/*"></paper-input>
+
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button on-click="addLink" dialog-confirm autofocus>Add</paper-button>
+            </div>
+        </paper-dialog>
+
+
+        <!--dialog for navbar edit-->
+        <paper-dialog id="editDialog" with-backdrop >
+            <h5 style="text-align: center; margin-top: 30px; " id="navHeader">Editing <span id="nameOfLink" style="color: #21CE41;"></span></h5>
+            <!--<hr style="background-color: #21CE41; width: 90px; align-items: center">-->
+            <div style="margin-bottom: 5px">
+                <div id="logoDiv">
+                    <h6 style="margin-top:10px; margin-bottom: 0px; text-decoration: underline">Logo Pic</h6>
+                    <paper-input  id="logoPic" type="file" accept="image/*" ></paper-input>
+                    <h6 style="margin-top:10px; margin-bottom: 0px; text-decoration: underline">Logo Icon</h6>
+                    <paper-input  id="logoIcon" type="file" accept="image/*" ></paper-input>
+                </div>
+                <paper-input label="Button Link" id="navLink"></paper-input>
+                <paper-input label="Button Title" id="navTitle"></paper-input>
+            <paper-input label="Button Arabic Title" id="navArabic"></paper-input>
+
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button id="editLinkButt" on-click="editLink" dialog-confirm autofocus>Edit</paper-button>
+                <paper-button id="editLogoButt" on-click="editAppLogo" dialog-confirm autofocus>Edit</paper-button>
+            </div>
+        </paper-dialog>
+
+        <!--dialog for adding OR editing slide-->
+
+        <paper-dialog id="addNewSlideDialog"   style="max-height: 500px; overflow-y: scroll; min-width: 200px" with-backdrop>
+            <h5 style="text-align: center; margin-top: 30px; " ><span id="slideDialogTitle"></span> <span style="color: #21CE41;">Slide</span></h5>
+
+            <div style="margin-bottom: 5px">
+
+                <div id="sliderTitle">
+                <h6 style="margin-top:10px; margin-bottom: 0px; text-decoration: underline">Slide Title</h6>
+                <paper-input  label="Slide Title" id="slideTitle"></paper-input>
+                <paper-input  label="Slide Arabic Title" id="slideTitleArabic"></paper-input>
+                <hr style="background-color: #21CE41; width: 150px; align-items: center">
+                </div>
+
+                <div id="sliderBody">
+                <h6 style="margin-top:10px; margin-bottom: 10px; text-decoration: underline">Slide Body</h6>
+                <paper-input  label="Slide Content" id="slideContent"></paper-input>
+                <paper-input   label="Slide Arabic Content" id="slideContentArabic"></paper-input>
+                <hr style="background-color: #21CE41; width: 150px; align-items: center">
+                </div>
+
+                <div id="sliderButton">
+                <h6 style="margin-top:10px; margin-bottom: 0px; text-decoration: underline">Slide Button</h6>
+                <paper-input  label="Slide Button Title" id="slideButtonTitle"></paper-input>
+                <paper-input  label="Slide Button Arabic Title" id="slideButtonArabic"></paper-input>
+                <paper-input  label="Slide Button link" id="slideButtonLink"></paper-input>
+                </div>
+
+                <div id="slidePicDiv" >
+                    <hr style="background-color: #21CE41; width: 150px; align-items: center">
+                <h6 style="margin-top:10px; margin-bottom: 0px; text-decoration: underline">Slide Picture</h6>
+                <paper-input  type="file" accept="image/*" id="acceptPic"></paper-input>
+                </div>
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button on-click="addSlide" id="addSlideButton" dialog-confirm autofocus>Add</paper-button>
+                <paper-button on-click="editSlidePic" id="editSlidePicButton" dialog-confirm autofocus>Edit Pic</paper-button>
+                <paper-button on-click="editSlideTitle" id="editSlideTitleButton" dialog-confirm autofocus>Edit Title</paper-button>
+                <paper-button on-click="editSlideBody" id="editSlideBodyButton" dialog-confirm autofocus>Edit Content</paper-button>
+                <paper-button on-click="editSlideLink" id="editSlideLinkButton" dialog-confirm autofocus>Edit Button</paper-button>
+            </div>
+
+        </paper-dialog>
+
+        <!--dialog for editing about us -->
+        <paper-dialog id="editTitleAboutDialog" with-backdrop style="max-width: 500px; min-width: 700px; overflow-y: scroll" >
+            <h5 style="text-align: center; margin-top: 30px; " >Editing <span style="color: #21CE41;">About Us</span></h5>
+            <!--<hr style="background-color: #21CE41; width: 90px; align-items: center">-->
+            <div style="margin-bottom: 5px">
+                <h6 style="margin-top:10px; margin-bottom: 0; text-decoration: underline">Content</h6>
+                <paper-textarea style=""  id="aboutContentInput" char-counter maxlength="1000"></paper-textarea>
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button on-click="editAbout" dialog-confirm autofocus>Edit</paper-button>
+            </div>
+        </paper-dialog>
+
+
+        <!--dialoge for editing services-->
+        <paper-dialog id="editServiceDialog" with-backdrop style="max-width: 300px; min-width: 500px; overflow-y: scroll" >
+            <h5 style="text-align: center; margin-top: 30px; " >Editing <span style="color: #21CE41;">Service</span></h5>
+            <!--<hr style="background-color: #21CE41; width: 90px; align-items: center">-->
+            <div style="margin-bottom: 5px">
+
+                <paper-input  id="serviceImage" type="file" accept="image/*"  ></paper-input>
+                <paper-input  label="Service Title" id="serviceTitle"></paper-input>
+                <paper-input label="Service Arabic Title" id="serviceTitleArabic"></paper-input>
+
+                <paper-textarea always-float-label   label="Service Content" id="serviceBody" ></paper-textarea>
+
+                <paper-textarea always-float-label  label="Service Arabic Content" id="serviceBodyArabic"></paper-textarea>
+
+                <paper-input label="Service Button Title" id="serviceButton"></paper-input>
+                <paper-input label="Service Button Title Arabic" id="serviceButtonArabic"></paper-input>
+                <paper-input label="Service Button Titl" id="serviceButtonLink"></paper-input>
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button on-click="editServiceImage" id="serviceImageButt" dialog-confirm autofocus>Edit Pic</paper-button>
+                <paper-button on-click="editServiceTitle" id="serviceTitleButt" dialog-confirm autofocus>Edit Title</paper-button>
+                <paper-button on-click="editServiceBody" id="serviceBodyButt" dialog-confirm autofocus>Edit Content</paper-button>
+                <paper-button on-click="editServiceLink" id="serviceLinkButt" dialog-confirm autofocus>Edit Button</paper-button>
+
+            </div>
+        </paper-dialog>
+
+        <!--dialog for editing Our Projects sec -->
+        <paper-dialog id="editProjectsImageDialog" with-backdrop style="max-width: 500px; overflow-y: scroll" >
+            <h5 style="text-align: center; margin-top: 30px; " >Editing <span style="color: #21CE41;">Projects</span></h5>
+            <div style="margin-bottom: 5px">
+                <paper-input  id="projectsImageInput"  type="file" accept="image/*"></paper-input>
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button on-click="editProjectsImage" dialog-confirm autofocus>Edit Pic</paper-button>
+            </div>
+        </paper-dialog>
+
+        <paper-toast id="successToastAdmin" text="" ></paper-toast>
+    </template>
+
+    <script>
+        var idUsedNow;
+        var linkService;
+        var linkNumber;
+
+        var adminElementContext;
+        var navbarLinks;
+        var editDialog;
+        var navHeader;
+        var navTitle;
+        var navArabic;
+        var navLink;
+        var nameOfLink;
+        var successToastAdmin;
+        var addNewSlideDialog;
+
+//        adding new navbar button
+        var newTitle;
+        var newArabic;
+        var newLink;
+        var addLinkDialog;
+        var logoPic;
+        var editLinkButt;
+        var editLogoButt;
+        var logoIcon;
+        var logoDiv;
+
+       var newTitleButt;
+       var newArabicButt;
+       var newContent;
+       var newContentArabic;
+       var newpageImage;
+
+
+//        adding slide dialog or edit
+        var slideTitle;
+        var slideTitleArabic;
+        var slideContent;
+        var slideContentArabic;
+        var slideButtonTitle;
+        var slideButtonArabic;
+        var slideButtonLink;
+        var acceptPic;
+        var slidePicDiv;
+        var addSlideButton;
+
+        var sliderTitle;
+        var sliderBody;
+        var sliderButton;
+        var editSlidePicButton;
+        var editSlideTitleButton;
+        var editSlideBodyButton;
+        var editSlideLinkButton;
+
+        var slideDialogTitle;
+
+        //edit about us dialog
+        var editTitleAboutDialog;
+        var aboutContentInput;
+
+        //edit services dialog
+        var serviceTitle;
+        var serviceTitleArabic;
+        var serviceBody;
+        var serviceBodyArabic;
+        var serviceButton;
+        var serviceButtonArabic;
+        var serviceButtonLink;
+        var serviceImage;
+        var editServiceDialog;
+       var serviceImageButt;
+       var serviceTitleButt;
+       var serviceBodyButt;
+        var serviceLinkButt;
+//edit projects dialog
+        var editProjectsImageDialog;
+        var projectsImageInput;
+
+        var exitButton;
+        class AdminElement extends Polymer.Element {
+            static get is() { return 'admin-element'; }
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: 'admin-element'
+                    },
+                    links:{
+                        type: Array,
+                        notify: true
+                    },
+                    specialLink:{
+                        type: Array,
+                        notify: true
+                    },
+                    logoNavbar:{
+                        type: Array,
+                        notify: true
+                    },
+                    slides:{
+                        type: Array,
+                        notify: true
+                    },
+                    sec:{
+                        type: Array,
+                        notify: true
+                    },
+                    service:{
+                        type: Array,
+                        notify: true
+                    },
+                    projects:{
+                        type: Array,
+                        notify: true
+                    }
+
+                };
+
+
+
+
+            }
+            ready() {
+                super.ready();
+                adminElementContext = this;
+//                checkSignIn(function (assignLogCok) {
+//                    console.log(assignLogCok);
+//                    if(assignLogCok == ""){
+//                        window.location.href="/signin";
+//                    }else{
+//
+//                    }
+//                });
+
+                navbarLinks = this.$.navbarLinks;
+                editDialog = this.$.editDialog;
+                navHeader = this.$.navHeader;
+                navTitle = this.$.navTitle;
+                navArabic = this.$.navArabic;
+                navLink = this.$.navLink;
+                nameOfLink = this.$.nameOfLink;
+                successToastAdmin = this.$.successToastAdmin;
+                logoIcon = this.$.logoIcon;
+                logoDiv = this.$.logoDiv;
+
+
+                newTitle = this.$.newTitle;
+                newArabic = this.$.newArabic;
+                newLink = this.$.newLink;
+                addLinkDialog = this.$.addLinkDialog;
+                logoPic = this.$.logoPic;
+                 editLinkButt = this.$.editLinkButt;
+                 editLogoButt = this.$.editLogoButt;
+
+                 newTitleButt = this.$.newTitleButt;
+                 newArabicButt= this.$.newArabicButt;
+                 newContent = this.$.newContent;
+                 newContentArabic = this.$.newContentArabic;
+                 newpageImage = this.$.newpageImage;
+
+                addNewSlideDialog = this.$.addNewSlideDialog;
+                slideTitle = this.$.slideTitle;
+                slideTitleArabic = this.$.slideTitleArabic;
+                slideContent = this.$.slideContent;
+                slideContentArabic = this.$.slideContentArabic;
+                slideButtonTitle = this.$.slideButtonTitle;
+                slideButtonArabic = this.$.slideButtonArabic;
+                slideButtonLink = this.$.slideButtonLink;
+                acceptPic = this.$.acceptPic;
+                slideDialogTitle = this.$.slideDialogTitle;
+                slidePicDiv = this.$.slidePicDiv;
+                addSlideButton = this.$.addSlideButton;
+
+                 sliderTitle = this.$.sliderTitle;
+                 sliderBody = this.$.sliderBody;
+                 sliderButton = this.$.sliderButton;
+
+                 editSlidePicButton = this.$.editSlidePicButton;
+                 editSlideTitleButton = this.$.editSlideTitleButton;
+                 editSlideBodyButton = this.$.editSlideBodyButton;
+                 editSlideLinkButton = this.$.editSlideLinkButton;
+
+
+
+                editTitleAboutDialog = this.$.editTitleAboutDialog;
+                aboutContentInput = this.$.aboutContentInput;
+
+
+                 serviceTitle = this.$.serviceTitle;
+                 serviceBody = this.$.serviceBody;
+                 serviceButton = this.$.serviceButton;
+                 serviceImage = this.$.serviceImage;
+                editServiceDialog = this.$.editServiceDialog;
+                serviceTitleArabic = this.$.serviceTitleArabic;
+                serviceBodyArabic = this.$.serviceBodyArabic;
+                serviceButtonArabic = this.$.serviceButtonArabic;
+                serviceButtonLink = this.$.serviceButtonLink;
+                serviceImageButt = this.$.serviceImageButt;
+                serviceTitleButt = this.$.serviceTitleButt;
+                serviceBodyButt = this.$.serviceBodyButt;
+                serviceLinkButt = this.$.serviceLinkButt;
+
+                editProjectsImageDialog = this.$.editProjectsImageDialog;
+                projectsImageInput = this.$.projectsImageInput;
+
+                exitButton = this.$.exitButton;
+
+                getNavbar(function (navbar) {
+                    adminElementContext.set('links', navbar.static);
+                    adminElementContext.set('specialLink', navbar.special);
+                    console.log("log", navbar.special);
+                });
+
+                getNavLogo(function (navLogoCallBack) {
+                    adminElementContext.set('logoNavbar', navLogoCallBack);
+                });
+
+
+                getSlider(function (sliderCallBack) {
+                    adminElementContext.set('slides', sliderCallBack);
+                    console.log(sliderCallBack);
+                });
+
+                getStaticSections(function (sectionsCallBack) {
+
+                    console.log(sectionsCallBack);
+                    var arryOfSec = [];
+                    arryOfSec.push(sectionsCallBack.aboutUs);
+                    adminElementContext.set('sec', arryOfSec);
+                    var arryOfProjects = [];
+                    arryOfProjects.push(sectionsCallBack.projects);
+                    adminElementContext.set('projects', arryOfProjects[0]);
+                    console.log(arryOfProjects[0]);
+                });
+
+                getAllServices(function (serviceCallBack) {
+                    adminElementContext.set('service', serviceCallBack);
+                });
+
+
+            }
+            deleteBut(e){
+                deletePage(e.model.specialLinks.link, e.model.specialLinks.linkName,function (assignlogmsg) {
+                        console.log(assignlogmsg);
+                    });
+            }
+
+            editBut(e){
+//                let input = document.createElement('paper-input');
+//                this.$.editDialog.appendChild(input);
+//                input.label = "Name";
+//                input.id = "input1";
+                navTitle.value = e.model.link.linkName;
+                navTitle.style.display = "block";
+
+                navArabic.style.display = "block";
+                navLink.style.display = "none";
+                nameOfLink.innerHTML = "Button";
+                logoPic.style.display = "none";
+                logoIcon.style.display = "none";
+                logoDiv.style.display = "none";
+                editLinkButt.style.display = "block";
+                editLogoButt.style.display = "none";
+
+                navArabic.value = e.model.link.arValue;
+                navLink.value = e.model.link.link;
+                nameOfLink.innerHTML = e.model.link.linkName;
+                logoPic.style.display = "none";
+                linkNumber = e.model.link.linkNumber;
+                editDialog.open();
+            }
+
+            addNewLinkDialog(){
+                newTitleButt.value = "";
+                newArabicButt.value = "";
+                newContent.value = "";
+                newContentArabic.value = "";
+                newpageImage.value = "";
+
+                addLinkDialog.open();
+            }
+
+            addLink(e){
+
+                var linkObj= {
+                    title: {
+                        en: newTitleButt.value,
+                        ar: newArabicButt.value
+                    },
+                    content: {
+                        en: newContent.value,
+                        ar: newContentArabic.value
+                    }
+                }
+
+                addPage(linkObj, newpageImage.inputElement.inputElement.files[0], function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+
+            editLink(e){
+               var linkObj = {
+                   linkName: navTitle.value,
+                    ar: navArabic.value,
+                    link: navLink.value
+
+                };
+                editStaticNavLink(linkNumber, linkObj, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+
+            }
+
+            addNewSlideDialog(e){
+                sliderTitle.style.display = "block";
+                sliderBody.style.display = "block";
+
+                editSlidePicButton.style.display = "none";
+                editSlideTitleButton.style.display = "none";
+                editSlideBodyButton.style.display = "none";
+                editSlideLinkButton.style.display = "none";
+
+                slideTitle.value = "";
+                slideTitleArabic.value = "";
+                slideContent.value ="";
+                slideContentArabic.value = "";
+                slideButtonTitle.value = "";
+                slideButtonArabic.value = "";
+                slideButtonLink.value = "";
+                slideDialogTitle.innerText = "Add";
+                slidePicDiv.style.display = "block";
+                addSlideButton.style.display = "block";
+                logoPic.style.display = "none";
+                sliderBody.style.display= "block";
+                sliderTitle.style.display= "block";
+
+
+                addNewSlideDialog.open();
+
+            }
+
+            editSlidePicDialog(e){
+               sliderTitle.style.display = "none";
+               sliderBody.style.display = "none";
+               sliderButton.style.display = "none";
+                slideDialogTitle.innerText = "Edit";
+                slideDialogTitle.style.display = "block";
+                slidePicDiv.style.display = "block";
+                addSlideButton.style.display = "none";
+                logoPic.style.display = "none";
+
+                editSlidePicButton.style.display = "block";
+                editSlideTitleButton.style.display = "none";
+                editSlideBodyButton.style.display = "none";
+                editSlideLinkButton.style.display = "none";
+                addSlideButton.style.display = "none";
+
+                slideTitle.value = "";
+                slideTitleArabic.value = "";
+                slideContent.value ="";
+                slideContentArabic.value = "";
+                slideButtonTitle.value = "";
+                slideButtonArabic.value = "";
+                slideButtonLink.value = "";
+                idUsedNow = e.model.slide.sliderKey;
+                addNewSlideDialog.open();
+            }
+
+            editSlidePic(){
+
+                console.log();
+                editSliderImage(idUsedNow, acceptPic.inputElement.inputElement.files[0], function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            editTitleDialog(e){
+
+                editSlidePicButton.style.display = "none";
+                editSlideTitleButton.style.display = "block";
+                editSlideBodyButton.style.display = "none";
+                editSlideLinkButton.style.display = "none";
+                logoPic.style.display = "none";
+                sliderTitle.style.display = "block";
+                sliderBody.style.display = "none";
+                sliderButton.style.display = "none";
+                slidePicDiv.style.display = "none";
+                addSlideButton.style.display = "none";
+                slideDialogTitle.innerText = "Edit";
+                slideDialogTitle.style.display = "block";
+                slideTitle.value =  e.model.slide.title.en;
+                slideTitleArabic.value = e.model.slide.title.ar;
+                addSlideButton.style = "display: none;";
+                slideContent.value ="";
+                slideContentArabic.value = "";
+                slideButtonTitle.value = "";
+                slideButtonArabic.value = "";
+                slideButtonLink.value = "";
+                idUsedNow = e.model.slide.sliderKey;
+                addNewSlideDialog.open();
+            }
+
+            editSlideTitle(e){
+                var editPart = "title";
+                var slideObj = {
+                    en: slideTitle.value,
+                    ar: slideTitleArabic.value
+                };
+
+                editSlider(idUsedNow, editPart, slideObj, function (assignlogmsg) {
+                    assignlogmsg
+                });
+
+            }
+
+            editBodyDialog(e){
+                editSlidePicButton.style.display = "none";
+                editSlideTitleButton.style.display = "none";
+                editSlideBodyButton.style.display = "block";
+                editSlideLinkButton.style.display = "none";
+                logoPic.style.display = "none";
+                sliderTitle.style.display = "none";
+                sliderBody.style.display = "block";
+                sliderButton.style.display = "none";
+                slidePicDiv.style.display = "none";
+                addSlideButton.style.display = "none";
+                slideDialogTitle.innerText = "Edit";
+                slideTitle.value = "";
+                slideTitleArabic.value = "";
+                slideContent.value =e.model.slide.content.en;
+                slideContentArabic.value = e.model.slide.content.ar;
+                slideButtonTitle.value = "";
+                slideButtonArabic.value = "";
+                slideButtonLink.value = "";
+                idUsedNow = e.model.slide.sliderKey;
+                addNewSlideDialog.open();
+            }
+
+            editSlideBody(e){
+                var editPart = "content";
+                var slideObj = {
+                    en: slideContent.value,
+                    ar: slideContentArabic.value
+                };
+
+                editSlider(idUsedNow, editPart, slideObj, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            editButtonDialog(e){
+
+                editSlidePicButton.style.display = "none";
+                editSlideTitleButton.style.display = "none";
+                editSlideBodyButton.style.display = "none";
+                editSlideLinkButton.style.display = "block";
+                logoPic.style.display = "none";
+                sliderTitle.style.display = "none";
+                sliderBody.style.display = "none";
+                sliderButton.style.display = "block";
+                slidePicDiv.style.display = "none";
+                addSlideButton.style.display = "none";
+                slideDialogTitle.innerText = "Edit";
+                slideTitle.value = "";
+                slideTitleArabic.value = "";
+                slideContent.value ="";
+                slideContentArabic.value = "";
+                slideButtonTitle.value = e.model.slide.link.en;
+                slideButtonArabic.value = e.model.slide.link.ar;
+                slideButtonLink.value = e.model.slide.link.reference;
+                idUsedNow = e.model.slide.sliderKey;
+                addNewSlideDialog.open();
+            }
+
+            editSlideLink(e){
+                var editPart = "link";
+                var slideObj = {
+                    en: slideButtonTitle.value,
+                    ar: slideButtonArabic.value,
+                    reference: slideButtonLink.value
+                };
+
+                editSlider(idUsedNow, editPart, slideObj, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+
+            editContentAbout(e){
+                aboutContentInput.value = "";
+                aboutContentInput.value = e.model.secs.content.en;
+                editTitleAboutDialog.open();
+            }
+            editAbout(e){
+                var secObject = {
+                    ar:"",
+                    en: aboutContentInput.value
+                };
+                editSection("aboutUs", "content", secObject, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            addSlide(e){
+
+                var slideObj = [];
+                console.log(acceptPic.inputElement.inputElement.files[0]);
+                slideObj.push({
+                    content:{
+                        en: slideContent.value,
+                        ar: slideContentArabic.value
+                    },
+                    title:{
+                        en: slideTitle.value,
+                        ar: slideTitleArabic.value
+                    },
+                    link: {
+                        en: slideButtonTitle.value,
+                        ar: slideButtonArabic.value,
+                        reference: slideButtonLink.value
+                    }
+                });
+                addSlider(slideObj[0], acceptPic.inputElement.inputElement.files[0], function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            editSlide(e){
+                var slideObj = [];
+
+                slideObj.push({
+                    content:{
+                        en: slideContent.value,
+                        ar: slideContentArabic.value
+                    },
+                    title:{
+                        en: slideTitle.value,
+                        ar: slideTitleArabic.value
+                    },
+                    link: {
+                        en: slideButtonTitle.value,
+                        ar: slideButtonArabic.value,
+                        reference: slideButtonLink.value
+                    }
+                });
+                editSlider(slideObj[0], acceptPic.inputElement.inputElement.files[0], function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            deleteSlide(e){
+                deleteSlider(e.model.slide.sliderKey, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            seviceImageDialog(e){
+                serviceTitle.style.display = "none";
+                serviceBody.style.display = "none";
+                serviceButton.style.display = "none";
+                serviceImage.style.display = "block";
+                logoPic.style.display = "none";
+                serviceTitle.style.display = "none";
+
+                serviceButton.style.display = "none";
+
+                editServiceDialog.style.display = "none";
+                serviceTitleArabic.style.display = "none";
+                serviceBodyArabic.style.display = "none";
+                serviceButtonArabic.style.display = "none";
+                serviceButtonLink.style.display = "none";
+                serviceImageButt.style.display = "block";
+                serviceTitleButt.style.display = "none";
+                serviceBodyButt.style.display = "none";
+                serviceLinkButt.style.display = "none";
+                idUsedNow = e.model.services.serviceKey;
+                editServiceDialog.open();
+
+            }
+
+            editServiceImage() {
+
+
+                editServiceImage(idUsedNow, serviceImage.inputElement.inputElement.files[0], function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            seviceTitleDialog(e){
+                serviceTitle.style.display = "none";
+                serviceBody.style.display = "none";
+                serviceButton.style.display = "none";
+                logoPic.style.display = "none";
+                serviceTitle.style.display = "block";
+                serviceBody.style.display = "none";
+                serviceButton.style.display = "none";
+                serviceImage.style.display = "none";
+                editServiceDialog.style.display = "none";
+                serviceTitleArabic.style.display = "block";
+                serviceBodyArabic.style.display = "none";
+                serviceButtonArabic.style.display = "none";
+                serviceButtonLink.style.display = "none";
+                serviceImageButt.style.display = "none";
+                serviceTitleButt.style.display = "block";
+                serviceBodyButt.style.display = "none";
+                serviceLinkButt.style.display = "none";
+                serviceTitle.value = e.model.services.title.en;
+                serviceTitleArabic.value = e.model.services.title.ar;
+                idUsedNow = e.model.services.serviceKey;
+                editServiceDialog.open();
+
+            }
+
+            editServiceTitle(){
+                var editPart = "title";
+                var serviceObj = {
+                    en: serviceTitle.value,
+                    ar: serviceTitleArabic.value
+                };
+                editService(idUsedNow, editPart, serviceObj, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            seviceBodyDialog(e){
+                serviceTitle.style.display = "none";
+                serviceBody.style.display = "block";
+
+                serviceButton.style.display = "none";
+                logoPic.style.display = "none";
+                serviceTitle.style.display = "none";
+                serviceButton.style.display = "none";
+                serviceImage.style.display = "none";
+                editServiceDialog.style.display = "none";
+                serviceTitleArabic.style.display = "none";
+                serviceBodyArabic.style.display = "block";
+                serviceButtonArabic.style.display = "none";
+                serviceButtonLink.style.display = "none";
+                serviceImageButt.style.display = "none";
+                serviceTitleButt.style.display = "none";
+                serviceBodyButt.style.display = "block";
+                serviceLinkButt.style.display = "none";
+                serviceBody.value = "";
+                serviceBodyArabic.value = "";
+                serviceBody.value = e.model.services.fullContent.en;
+                serviceBodyArabic.value = e.model.services.fullContent.ar;
+                idUsedNow = e.model.services.serviceKey;
+                editServiceDialog.open();
+
+            }
+
+            editServiceBody(){
+                var editPart = "content";
+                var serviceObj = {
+                    en: serviceBody.value,
+                    ar: serviceBodyArabic.value
+                };
+                editService(idUsedNow, editPart, serviceObj, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            seviceButtonDialog(e){
+                serviceTitle.style.display = "none";
+                serviceBody.style.display = "none";
+                serviceButton.style.display = "block";
+                logoPic.style.display = "none";
+                serviceTitle.style.display = "none";
+
+                serviceImage.style.display = "none";
+                editServiceDialog.style.display = "none";
+                serviceTitleArabic.style.display = "none";
+                serviceBodyArabic.style.display = "none";
+                serviceButtonArabic.style.display = "block";
+                serviceButtonLink.style.display = "none";
+                serviceImageButt.style.display = "none";
+                serviceTitleButt.style.display = "none";
+                serviceBodyButt.style.display = "none";
+                serviceLinkButt.style.display = "block";
+                serviceButton.value = e.model.services.link.en;
+                serviceButtonArabic.value = e.model.services.link.ar;
+                linkService = e.model.services.link.reference;
+                idUsedNow = e.model.services.serviceKey;
+                editServiceDialog.open();
+
+            }
+            editServiceLink(){
+                var editPart = "link";
+                var serviceObj = {
+                    en: serviceButton.value,
+                    ar: serviceButtonArabic.value,
+                    reference: linkService
+                };
+                editService(idUsedNow, editPart, serviceObj, function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+            editProjectsDialog(e){
+
+                editProjectsImageDialog.open();
+
+            }
+            editProjectsImage(){
+                editSectionImage("projects", projectsImageInput.inputElement.inputElement.files[0], function (assignlogmsg) {
+                    successToastAdmin.text = assignlogmsg;
+                    successToastAdmin.open();
+                });
+            }
+
+
+            editAppLogoDialog(e){
+                logoDiv.style.display = "block";
+                navArabic.style.display = "none";
+                navLink.style.display = "none";
+                nameOfLink.innerHTML = "Logo";
+                logoPic.style.display = "block";
+                logoIcon.style.display = "block";
+                navTitle.style.display = "none";
+                editLinkButt.style.display = "none";
+                editLogoButt.style.display = "block";
+
+                editDialog.open();
+            }
+
+            editAppLogo(){
+
+                if(logoPic.inputElement.inputElement.files[0] !== undefined && logoIcon.inputElement.inputElement.files[0] === undefined ) {
+                    editNavLogo(logoPic.inputElement.inputElement.files[0], function (assignlogmsg) {
+                        successToastAdmin.text = assignlogmsg;
+                        successToastAdmin.open();
+                    });
+                } else if(logoIcon.inputElement.inputElement.files[0] !== undefined && logoPic.inputElement.inputElement.files[0] === undefined) {
+                    editTabIcon(logoIcon.inputElement.inputElement.files[0], function (assignlogmsg) {
+                        successToastAdmin.text = assignlogmsg;
+                        successToastAdmin.open();
+                    });
+                }else if(logoIcon.inputElement.inputElement.files[0] !== undefined && logoPic.inputElement.inputElement.files[0] !== undefined) {
+                    editNavLogo(logoPic.inputElement.inputElement.files[0], function (assignlogmsg) {
+                        successToastAdmin.text = assignlogmsg;
+                        successToastAdmin.open();
+
+                        if(assignlogmsg === "done") {
+                            editTabIcon(logoIcon.inputElement.inputElement.files[0], function (assignlogmsg) {
+                                successToastAdmin.text = assignlogmsg;
+                                successToastAdmin.open();
+                            });
+                        }
+
+                    });
+
+
+
+                }
+            }
+
+
+            exitAdmin(){
+                signOutUser();
+                window.location.href="/signin";
+            }
+
+            toggle(){
+                this.shadowRoot.querySelector('#collapse').toggle();
+            }
+
+            _onTapAnchor(e) {
+               // e.preventDefault();
+                var anchor = e.target.attributes.href.value.split("/")[2];
+
+                var view = this.shadowRoot.querySelector(anchor);
+
+                this.animate(document.scrollingElement || document.documentElement, "scrollTop", "", 0, view.offsetTop, 500, true);
+//        view.scrollIntoView();
+            }
+            _isEqualTo(title, string) {
+                return title == string;
+            }
+            _notEqualTo(title, string) {
+                return title != string;
+            }
+            animate(elem, style, unit, from, to, time, prop) {
+                if (!elem) {
+                    return;
+                }
+                var start = new Date().getTime(),
+                    timer = setInterval(function () {
+                        var step = Math.min(1, (new Date().getTime() - start) / time);
+                        if (prop) {
+                            elem[style] = (from + step * (to - from))+unit;
+                        } else {
+                            elem.style[style] = (from + step * (to - from))+unit;
+                        }
+                        if (step === 1) {
+                            clearInterval(timer);
+                        }
+                    }, 25);
+                if (prop) {
+                    elem[style] = from+unit;
+                } else {
+                    elem.style[style] = from+unit;
+                }
+            }
+
+
+        }
+
+        window.customElements.define(AdminElement.is, AdminElement);
+    </script>
+</dom-module>

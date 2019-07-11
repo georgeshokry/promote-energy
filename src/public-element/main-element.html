@@ -1,0 +1,687 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../../bower_components/l2t-paper-slider/l2t-paper-slider.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-shared-styles.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/web-animations-js/web-animations.min.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+
+<link rel="import" href="../../bower_components/granite-bootstrap/granite-bootstrap.html">
+<link rel="import" href="/src/public-element/navbar-element.html">
+<link rel="import" href="/src/admin-element/footer-element.html">
+
+<script src="../../server/navbar.js"></script>
+<script src="../../server/slider.js"></script>
+<script src="../../server/sections.js"></script>
+<script src="../../server/services.js"></script>
+<script src="../../server/partners.js"></script>
+<script src="../../server/pages.js"></script>
+
+
+
+
+
+<dom-module id="main-element">
+  <template>
+    <style include="granite-bootstrap">
+      app-toolbar {
+        color: white;
+        box-shadow: 0px 1px 5px #000000;
+        z-index: 10;
+        min-height: 100px;
+        padding: 0;
+      }
+
+      paper-listbox {
+        --paper-listbox-color: gray;
+      }
+
+      paper-listbox .iron-selected a {
+        color: white;
+        background-color: #031829 !important;
+      }
+
+      paper-listbox {
+        color: white;
+        background-color: #031829 !important;
+        font-weight: lighter;
+      }
+
+      paper-listbox a {
+        text-decoration: none;
+        color: #031829;
+        cursor: default;
+        font-weight: lighter;
+        width: 100%;
+        padding: 15px;
+      }
+
+      paper-item:not(:first-child) {
+        box-shadow: 0 2px 2px -2px gray;
+      }
+
+      paper-item {
+        padding: 0;
+      }
+
+      paper-progress {
+        display: block;
+        width: 100%;
+      }
+
+      app-drawer-layout {
+        background-color: #f0f0f0;
+      }
+
+
+      app-drawer {
+        box-shadow: -1px 0px 10px #888888;
+        z-index: 5;
+        top: 100px;
+        transition-duration: 10ms !important;
+        height: 100%;
+        --app-drawer-content-container: {
+          padding-top: 30px;
+        }
+        ;
+      }
+
+       :host {
+        --app-drawer-width: 200px;
+        --app-grid-columns: 3;
+        --app-primary-color: #031829;
+      }
+
+      app-header {
+        background-color: var(--app-primary-color);
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      .navbar {
+        overflow: hidden;
+        background-color: #031829;
+        width: 50%;
+      }
+
+      .navbar a {
+        float: left;
+        font-size: 16px;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      .dropdown {
+        float: left;
+      }
+
+      .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 0px 20px;
+        background-color: inherit;
+      }
+
+      .navbar,
+      .dropdown:hover .dropbtn {
+        border-bottom: inset;
+        border-color: #21CE41;
+        text-decoration: none;
+        padding-bottom: 10px;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        min-width: 160px;
+        box-shadow: 2px 8px 16px 0 rgba(255, 255, 255, 0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        float: none;
+        color: #fdfbff;
+        background-color: #031829;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #031829;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+        cursor: pointer;
+        max-width: 100px;
+      }
+
+      .logo {
+
+        width: 200px;
+        margin-right: 50px;
+      }
+
+
+
+      .custom {
+        /*--paper-slide-width: 100%;*/
+        --paper-slide-height: 550px;
+        --paper-slide-dot: rgba(1, 96, 100, 0.8);
+        --paper-slide-dot-selected: rgb(255, 255, 255);
+      }
+
+      .dynamicImage {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        height: 100%;
+      }
+
+
+      .dropdownFont {
+        font-family: 'Poppins';
+        font-weight: 100;
+        font-size: 15px;
+      }
+
+      .navBarFont {
+        font-family: 'Kanit';
+      }
+
+
+      .sliderTitle {
+        font-family: 'Roboto';
+        color: white;
+
+        font-size: 70px;
+        font-weight: 400;
+      }
+
+      .sliderBody {
+        font-size: 25px;
+        color: white;
+        font-family: 'Roboto';
+        font-weight: 100;
+
+      }
+
+      .sliderContent {
+        word-break: break-all;
+        padding-top: 50px;
+      }
+
+      .aboutUs {
+        min-height: 200px;
+        background-image: url("../../icons/2-04.png");
+        width: 100%;
+        background-size: cover;
+        /*padding-top: 30px;*/
+        margin-bottom: 0;
+        margin-top: 50px;
+      }
+
+      .services {
+        /*font-family: 'Roboto';*/
+        /*font-weight: 500;*/
+        min-height: 200px;
+        background-color: #dfdfdf;
+        width: 100%;
+        background-size: cover;
+        padding-top: 30px;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+
+      .projects {
+        /*font-family: 'Roboto';*/
+        /*font-weight: 500;*/
+        min-height: 500px;
+        background-image: url("/images/Untitled-1-01.jpg");
+        width: 100%;
+        background-size: cover;
+        padding-top: 30px;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+
+
+
+      .utilityTools {
+        position: relative;
+        display: inline-block;
+        max-width: 70px;
+        max-height: 50px;
+        background-color: rgba(223, 212, 212, 0.56);
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 0;
+        box-shadow: #aaaaaa;
+      }
+
+      .cardReform {
+        background-color: #031829;
+        align-items: center;
+        max-width: 200px;
+        text-align: center;
+        padding: 20px
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #031829;
+        min-width: 120px;
+        box-shadow: 0px 8px 16px 0px rgba(168, 168, 168, 0.2);
+        padding: 12px 16px;
+        z-index: 1;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .contactUs {
+        /*font-family: 'Roboto';*/
+        /*font-weight: 500;*/
+        min-height: 200px;
+        background-color: white;
+        width: 100%;
+        background-size: cover;
+        padding-top: 30px;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      @media (max-width: 785px) {
+        .sliderTitle{
+          word-break: break-all;
+          font-size: 20px;
+        }
+        .sliderBody{
+          word-break: break-all;
+          font-size: 15px;
+        }
+
+        .resCards{
+          margin-left: 50px;
+        }
+      }
+
+
+
+    </style>
+
+    <!-- app-location binds to the app's URL -->
+    <app-location route="{{route}}"></app-location>
+
+    <!-- this app-route manages the top-level routes -->
+    <app-route route="{{route}}" pattern="/:view" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+
+    <navbar-element></navbar-element>
+
+
+    <!-- slider content-->
+
+    <div style="background-color: #031829;">
+      <!--<div style="border: 2px solid blue; width: 100%">-->
+      <l2t-paper-slider auto-progress slide-duration="10" class="custom" total-slides="{{slides.length}}">
+        <template id="sliderContent" is="dom-repeat" items="{{slides}}" as="slide">
+          <paper-slide class="dynamicImage" style$='background-image: url("{{slide.imageUrl}}")'>
+
+            <div class="sliderContent" style="max-width: 50px; max-height: 50px;">
+              <div class="row no-gutters" style="padding-left: 40px;">
+                <div class="col-12 col-sm-6 col-md-8">
+
+                  <p class="sliderTitle" style="word-break: break-all">{{slide.title.en}}</p>
+                  <!--<div class="sliderTitle" style="word-break: break-all" inner-h-t-m-l="{{slide.title.en}}"></div>-->
+
+                  <p class="sliderBody" style="word-break: break-all">{{slide.content.en}}</p>
+                  <a href="{{slide.link.reference}}" tabindex="-1">
+                    <paper-button style="color: #21CE41; background-color: #0a3142; font-size: 15px; font-weight: 500; width:150px; ">{{slide.link.en}}</paper-button>
+                  </a>
+
+                </div>
+
+              </div>
+            </div>
+          </paper-slide>
+
+        </template>
+
+
+      </l2t-paper-slider>
+
+
+
+
+    </div>
+
+
+    <!--about us section-->
+    <section id="AboutUs" class="section scrollspy">
+      <div class="row no-gutters textData aboutUs">
+
+        <template id="sectionSection" is="dom-repeat" items="{{sec}}" as="secs">
+          <div class="col-6 col-md-3 " style="padding-left: 50px;; font-size: 50px">
+
+            <h1 style="font-family: 'Poppins'; font-weight: 600">
+              {{secs.title.en}}
+
+            </h1>
+            <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-8">
+
+            <p style="font-size: 18px; font-family: 'Roboto'; font-weight: 600; padding-left: 50px">
+              {{secs.content.en}}
+
+            </p>
+
+
+
+
+          </div>
+        </template>
+
+      </div>
+    </section>
+
+    <!--services section-->
+    <section class="services" id="services">
+      <div class="row no-gutters" style="padding-bottom: 30px;">
+        <div class="col-md-3" style="font-family: 'Poppins'; padding-left: 50px; font-weight: 600; font-size: 50px;">
+          <h1 style="font-family: 'Poppins'; font-weight: 600">
+            Services
+          </h1>
+          <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+        </div>
+
+
+        <div class="col-md-9 row" style=" text-align: center; align-items: center">
+          <template id="serviceSection" is="dom-repeat" items="{{service}}" as="services">
+            <div class="resCards" style=" display: inline-block; margin-right: 0; padding-top: 0px; font-family: 'Poppins'; font-weight: 600; padding-left: 10px; padding-bottom: 10px">
+
+
+              <div class="" style="font-size: 30px; padding-right: 10px">
+                <!--<div style="width: 400px">-->
+                <div class=" " style="height: 360px; border-radius: 0; background-color: #031829;  width: 280px">
+                  <img class="" src="{{services.image}}" style="height: 100px; width: 100px; margin-top: 20px; margin-bottom: 10px;">
+
+                  <div class="" style="padding: 5px; text-align: center">
+                    <h4 class="" style="color: #21CE41; margin-bottom: 0; font-weight: 300">{{services.title.en}}</h4>
+
+
+                    <div style="font-weight: 400; font-size: 16px; text-align: center; align-content: center;color: white;" inner-h-t-m-l="{{services.content.en}}"></div>
+
+
+                  </div>
+
+                </div>
+
+
+                <div  style="height: 80px; border-radius: 0; background-color: #031829; margin-top: 0; padding-top: 0">
+                  <a href="/page/service/{{services.serviceKey}}">
+                    <paper-button raised="" style="color: #031829; background-color: #21CE41; font-size: 15px; font-weight: 500">{{services.link.en}}</paper-button>
+                  </a>
+                </div>
+                <!--</div>-->
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!--projects & missions section-->
+    <section class="projects section scrollspy" id="Projects">
+      <div class="row no-gutters" style="padding-bottom: 30px">
+
+        <div class="col-6 col-md-3" style="font-family: 'Poppins'; padding-left: 50px; font-weight: 600; font-size: 50px">
+          <h1 style="font-family: 'Poppins'; font-weight: 600; color: white">
+            {{projects.title.en}}
+          </h1>
+          <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-8">
+          <div style="position: relative">
+
+            <img src="{{projects.imageUrl}}" style="max-height: 450px; width: 100%;">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!--contact us & footer section-->
+    <section id="ContactUs" class="section scrollspy">
+    <div class="row no-gutters contactUs" style="padding-bottom: 50px; ">
+      <div class="col-6 col-md-3" style="font-family: 'Poppins'; padding-left: 50px; font-weight: 600; font-size: 50px">
+        <h1 style="font-family: 'Poppins'; font-weight: 600">
+          Contact <span style="color: #21CE41">Us</span>
+        </h1>
+        <hr style="background-color: #21CE41; width: 90px; margin-left: 0;">
+      </div>
+
+      <!--////////////START OF CONTACT US FORM///////////-->
+
+
+       <div class="col-12 col-sm-6 col-md-3" style="margin-right: 10px; padding-left: 50px; padding-right: 30px">
+        <paper-input value="{{contact.personname}}" name="name" label="Name" required auto-validate allowed-pattern="[a-zA-Z]"> error-message="required!"></paper-input>
+
+        <paper-input value="{{contact.phone}}" name="phone"  label="Phone" required  auto-validate allowed-pattern="^[0-9]*$" error-message="Enter Phone Number"></paper-input>
+
+        <paper-input value="{{contact.email}}" name="email" label="Mail Address" required auto-validate  pattern="^(.)+@[a-z A-Z _]+?\.[a-zA-Z]{2,3}$" error-message="Enter Mail Address"></paper-input>
+       </div>
+
+
+       <div class="textAreaDiv" style="margin-left: 50px; margin-right: 10px; padding-right: 30px; max-width: 300px; max-height: 135px; margin-top: 50px;">
+        <textarea   style="width: 300px;  height: 130px; resize:none;" value="{{contact.message}}" name="message" char-counter  maxlength="500" required placeholder="Message..."></textarea>
+
+        <!--////////////START OF CONTACT US FORM///////////-->
+
+
+       <paper-button on-click="contact" raised style="color: #031829; background-color: #21CE41; font-size: 13px; font-weight: 600">Send</paper-button>
+        <!--</form>-->
+      </div>
+    </div>
+    </section>
+
+    <footer-element>
+
+    </footer-element>
+
+
+  </template>
+
+  <script>
+      var mainElementContext = '';
+      var message;
+      var successToastContact;
+
+    class MainElement extends Polymer.Element {
+      static get is() { return 'main-element'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'main-element'
+          },
+          links: {
+            type: Array,
+            notify: true
+          },
+          specialLink: {
+            type: Array,
+            notify: true
+          },
+          logoNavbar: {
+            type: String,
+            notify: true
+          },
+          slides: {
+            type: Array,
+            notify: true
+          },
+          sec: {
+            type: Array,
+            notify: true
+          },
+          service: {
+            type: Array,
+            notify: true
+          },
+          projects: {
+            type: Array,
+            notify: true
+          },
+            contact: {
+                type: Object,
+                notify: true
+            }
+        };
+      }
+      ready() {
+        super.ready();
+
+
+          mainElementContext = this;
+          message = this.$.message;
+          successToastContact = this.$.successToastContact;
+        getNavbar(function (navbar) {
+          mainElementContext.set('links', navbar.static);
+          if (navbar.special.length > 0) {
+
+            mainElementContext.set('specialLink', navbar.special);
+          } else {
+            if (mainElementContext.smallscreen) {
+              var moreMobile = mainElementContext.shadowRoot.querySelector("#moreMobile");
+              moreMobile.remove();
+            } else {
+
+              var more = mainElementContext.shadowRoot.querySelector("#more");
+              more.remove();
+            }
+          }
+        });
+
+        getNavLogo(function (navLogoCallBack) {
+          mainElementContext.set('logoNavbar', navLogoCallBack);
+        });
+
+
+        getSlider(function (sliderCallBack) {
+          mainElementContext.set('slides', sliderCallBack);
+          console.log(sliderCallBack);
+        });
+
+        getStaticSections(function (sectionsCallBack) {
+
+          console.log(sectionsCallBack);
+          var arryOfSec = [];
+          arryOfSec.push(sectionsCallBack.aboutUs);
+          mainElementContext.set('sec', arryOfSec);
+          var arryOfProjects = [];
+          arryOfProjects.push(sectionsCallBack.projects);
+          mainElementContext.set('projects', arryOfProjects[0]);
+          console.log(arryOfProjects[0]);
+        });
+
+        getAllServices(function (serviceCallBack) {
+          mainElementContext.set('service', serviceCallBack);
+        });
+      }
+      contact(){
+          console.log(message.value);
+          var msg = message.value;
+          mainElementContext = this;
+          var data = new FormData();
+          data.append('name', mainElementContext.contact.personname);
+          data.append('email', mainElementContext.contact.email);
+          data.append('phone', mainElementContext.contact.phone);
+          data.append('message', msg);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'contact.php?name=' + mainElementContext.contact.personname + "&email=" + mainElementContext.contact.email + "&phone=" + mainElementContext.contact.phone + "&message=" + msg, true);
+
+          xhr.send(data);
+          xhr.onload = function () {
+              // do something to response
+              //console.log(this.responseText, "contactResponse");
+
+              mainElementContext.set('contact.personname', "");
+
+              mainElementContext.set('contact.email', "");
+
+              mainElementContext.set('contact.phone', "");
+              message.value = "";
+
+              successToastContact.text = this.responseText;
+              successToastContact.open();
+
+          };
+
+          console.log(data);
+
+
+
+      }
+
+    }
+
+    window.customElements.define(MainElement.is, MainElement);
+  </script>
+</dom-module>

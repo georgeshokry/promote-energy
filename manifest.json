@@ -1,0 +1,7 @@
+{
+  "name": "promote-energy",
+  "short_name": "promote-energy",
+  "description": "promote energy app",
+  "start_url": "/",
+  "display": "standalone"
+}

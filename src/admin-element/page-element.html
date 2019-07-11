@@ -1,0 +1,305 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="/bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="/bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="/bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="/bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="/bower_components/l2t-paper-slider/l2t-paper-slider.html">
+<link rel="import" href="/bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+
+<link rel="import" href="/bower_components/granite-bootstrap/granite-bootstrap.html">
+<!--<link rel="import" href="/src/public-element/navbar-element.html">-->
+<link rel="import" href="/src/admin-element/footer-element.html">
+
+<script src="../../server/pages.js"></script>
+
+
+
+<dom-module id="page-element">
+    <template>
+        <style include="granite-bootstrap">
+
+            #pageImageDiv{
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 300px;
+            }
+
+            #pageContentDiv{
+                margin: 40px;
+            }
+
+        </style>
+
+        <!-- app-location binds to the app's URL -->
+        <app-location route="{{route}}"></app-location>
+        <!-- this app-route manages the top-level routes -->
+        <app-route
+                route="{{route}}"
+                pattern="/pageadmin/:type/:page_id"
+                data="{{routeData}}"></app-route>
+
+        <app-toolbar style="background-color: #031829; ">
+
+
+            <paper-button on-click="backAdminPage" style="background-color: #21CE41; padding: 1px">< back</paper-button>
+        </app-toolbar>
+
+        <div id="pageContentDiv" style="background-color: #031829; margin: 0; align-content: center">
+            <div class="row" style$='background-image: url("{{page.image}}"); margin-right: 0; margin-left:0;background-repeat: no-repeat; background-size: 100%; background-position: center;'>
+                <div>
+                <div class="col-md-4">
+                    <div id="pageImageDiv">
+                        <paper-icon-button  style="size:30px; color: blue;" icon="create"  id="editPageAdminPic" on-click="editImage"></paper-icon-button>
+                        <paper-tooltip for="editPageAdminPic"  position="bottom" offset="0">Edit Pic </paper-tooltip>
+                    </div>
+                </div>
+                </div>
+
+
+
+                    <div style="margin: 100px auto; background-color: #031829; padding: 20px; " >
+                        <h1 style="font-family: 'Roboto'; font-weight: 400; color: white">
+                            {{page.title.en}}
+                            <paper-icon-button  style="size:30px; color: blue;" icon="create"  id="edit{{page.title.en}}" on-click="editTitle"></paper-icon-button>
+                            <paper-tooltip for="edit{{page.title.en}}"  position="bottom" offset="0" style="z-index: 30; display: block">Edit Title </paper-tooltip>
+                        </h1>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+        <div  style="text-align: center; width: 100%; padding: 30px">
+            <div style="font-family: 'Roboto'; font-weight: 300; color: #031829; font-size: 20px" inner-h-t-m-l="[[page.content.en]]"></div>
+                <paper-icon-button  style="size:30px; color: blue;" icon="create"  id="edit{{page.content.en}}" on-click="editBody"></paper-icon-button>
+
+
+        </div>
+        <paper-tooltip for="edit{{page.content.en}}"  position="bottom" offset="0" style="z-index: 100">Edit Content </paper-tooltip>
+
+
+
+
+        <!--footer and end of homepage-->
+        <footer-element style="margin: 0; padding: 0"></footer-element>
+
+        <!--dialoge for editing page content-->
+        <paper-dialog id="editPageContent" with-backdrop style="max-width: 300px; min-width: 500px; overflow-y: scroll" >
+            <h5 style="text-align: center; margin-top: 30px; " >Editing <span style="color: #21CE41;">Page</span></h5>
+            <!--<hr style="background-color: #21CE41; width: 90px; align-items: center">-->
+            <div style="margin-bottom: 5px">
+                <paper-input  id="pageImage" type="file" accept="image/*"  ></paper-input>
+                <paper-input label="Page Title" id="pageTitle"></paper-input>
+                <paper-input label="Page Arabic Title"  id="pageTitleArabic"></paper-input>
+                <paper-textarea always-float-label   label="Page Content" id="pageBody"></paper-textarea>
+                <paper-textarea always-float-label   label="Page Arabic Content" id="pageBodyArabic"></paper-textarea>
+            </div>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button id="editPagePicButt" on-click="editPagePic" dialog-confirm autofocus>Edit Pic</paper-button>
+                <paper-button id="editPageTitleButt" on-click="editPageTitle" dialog-confirm autofocus>Edit Title</paper-button>
+                <paper-button id="editPageContentButt" on-click="editPageContent" dialog-confirm autofocus>Edit Content</paper-button>
+
+            </div>
+        </paper-dialog>
+
+
+
+        <paper-toast id="successToast" text="" ></paper-toast>
+
+    </template>
+
+    <script>
+
+        var idUsedNow;
+        var dataUsedNow;
+        var successToast;
+        var editPageContent;
+        var pageImage;
+        var pageTitle;
+        var pageTitleArabic;
+        var pageBody;
+        var pageBodyArabic;
+        var editPagePicButt;
+        var editPageTitleButt;
+        var editPageContentButt;
+
+
+        class PageElement extends Polymer.Element {
+            static get is() { return 'page-element'; }
+            static get properties() {
+                return {
+                    page: {
+                        type: Object
+                    }
+                };
+            }
+
+            static get observers() {
+                return [
+                    '_routeChangedAdmin(route.ticket.*)'
+                ]
+            }
+
+            _routeChangedAdmin(changeRecord) {
+                if (this.routeData.page_id){
+                    if (this.routeData.type == "page"){
+
+                        var pageId = this.routeData.page_id;
+                        var boundFunction = (function(gotPage) {
+                            this.page = gotPage;
+                            console.log(gotPage);
+                        }).bind(this);
+                        getPage(pageId,boundFunction);
+                    }else if (this.routeData.type == "service"){
+
+                        var seviceId = this.routeData.page_id;
+                        var boundFunction = (function(gotService) {
+                            this.page = gotService;
+                            console.log(gotPage);
+                        }).bind(this);
+                        getService(seviceId,boundFunction);
+                    }
+                }
+            }
+
+            ready(){
+                super.ready();
+                successToast = this.$.successToast;
+                editPageContent = this.$.editPageContent;
+                 pageImage = this.$.pageImage;
+                 pageTitle = this.$.pageTitle;
+                 pageBody = this.$.pageBody;
+                pageTitleArabic = this.$.pageTitleArabic;
+                pageBodyArabic = this.$.pageBodyArabic;
+                 editPagePicButt = this.$.editPagePicButt;
+                 editPageTitleButt = this.$.editPageTitleButt;
+                 editPageContentButt= this.$.editPageContentButt;
+
+
+            }
+
+            editTitle(e){
+
+                pageImage.style.display = "none";
+                pageTitle.style.display = "block";
+                pageBody.style.display = "none";
+                pageTitleArabic.style.display = "block";
+                pageBodyArabic.style.display = "none";
+                pageTitle.value = page.title.en;
+                pageTitleArabic.value = page.title.ar;
+
+                editPagePicButt.style.display = "none";
+                editPageTitleButt.style.display = "block";
+                editPageContentButt.style.display = "none";
+
+                idUsedNow = page.pageKey;
+                dataUsedNow = page.title.en;
+                editPageContent.open();
+            }
+
+            editPageTitle(e){
+
+                var pageObject = {
+                        en: pageTitle.value,
+                        ar: pageTitleArabic.value
+                };
+
+
+                editPage(idUsedNow, "title", dataUsedNow, pageObject , function (assignlogmsg) {
+                    successToast.text = assignlogmsg;
+                    successToast.open();
+                });
+
+            }
+
+
+
+            editBody(e){
+                pageImage.style.display = "none";
+                pageTitle.style.display = "none";
+                pageBody.style.display = "block";
+                pageTitleArabic.style.display = "none";
+                pageBodyArabic.style.display = "block";
+                pageBody.value = page.content.en;
+                pageBodyArabic.value = page.content.ar;
+
+                editPagePicButt.style.display = "none";
+                editPageTitleButt.style.display = "none";
+                editPageContentButt.style.display = "block";
+
+                idUsedNow = page.pageKey;
+                dataUsedNow = page.content.en;
+
+                editPageContent.open();
+            }
+
+
+            editPageContent(e){
+
+                var pageObject = {
+                    en: pageBody.value,
+                    ar: pageBodyArabic.value
+                };
+
+
+                editPage(idUsedNow, "content", dataUsedNow, pageObject , function (assignlogmsg) {
+                    successToast.text = assignlogmsg;
+                    successToast.open();
+                });
+
+            }
+
+
+            editImage(e){
+
+                pageImage.style.display = "block";
+                pageTitle.style.display = "none";
+                pageBody.style.display = "none";
+                pageTitleArabic.style.display = "none";
+                pageBodyArabic.style.display = "none";
+
+
+                editPagePicButt.style.display = "block";
+                editPageTitleButt.style.display = "none";
+                editPageContentButt.style.display = "none";
+
+                idUsedNow = page.pageKey;
+                dataUsedNow = page.content.en;
+
+                editPageContent.open();
+            }
+
+            editPagePic(e){
+
+
+                console.log(idUsedNow);
+                editPageImage(idUsedNow, pageImage.inputElement.inputElement.files[0] , function (assignlogmsg) {
+                    successToast.text = assignlogmsg;
+                    successToast.open();
+                });
+
+            }
+
+            backAdminPage(){
+
+//                history.pushState({urlPath:'admin'},"",'admin');
+                window.location.href = "/admin";
+            }
+        }
+
+        window.customElements.define(PageElement.is, PageElement);
+    </script>
+</dom-module>

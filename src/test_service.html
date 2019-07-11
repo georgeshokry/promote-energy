@@ -1,0 +1,119 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/l2t-paper-slider/l2t-paper-slider.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="test-service">
+    <template>
+        <style>
+
+        </style>
+
+        <paper-input id="piTest"></paper-input>
+        <paper-button id="pbTest">Test</paper-button>
+        <p id="pTest">Test</p>
+        <input type="file" onchange="changeSliderName()" />
+        <button onclick="signInUser('basel.3ly@gmail.com','0123456')">upload</button>
+    </template>
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class TestService extends Polymer.Element {
+            static get is() { return 'test-service'; }
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: 'main-element'
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                var button = this.$.pbTest;
+                var p = this.$.pTest;
+                button.addEventListener('click', function (e) {
+                    //addSlider();
+
+                    /*getSlider(function (sliderData) {
+                        p.innerHTML = sliderData;
+                        console.log(sliderData);
+                    }) ;*/
+                    /*getPartners(function (Data) {
+                        p.innerHTML = Data;
+                        console.log(Data);
+                    });*/
+                    /*getNavService(function (serviceCallBack) {
+                        p.innerHTML = serviceCallBack;
+                        console.log(serviceCallBack);
+                    });*/
+                    /*getAllServices(function (serviceCallBack) {
+                        p.innerHTML = serviceCallBack;
+                        console.log(serviceCallBack);
+                    });*/
+                    /*createSection('test name',{
+                        title: {
+                            ar: "تايتل تست",
+                            en: "test title"
+                        },
+                        imageUrl: "ahdvas",
+                        content: {
+                            ar: "يستلاس",
+                            en: "csdcsdcsdc"
+                        }},
+                        '#testName',function (msg) {
+                        console.log(msg);
+                    });*/
+
+                    /*getSpecialSections(function (sections) {
+                       console.log(sections);
+                    });*/
+
+                    /*getStaticSections(function (sections) {
+                     console.log(sections);
+                    });*/
+
+                    /*getAllSections(function (sections) {
+                     console.log(sections);
+                     });*/
+
+                    /*editNavLogo('#logo_link' ,function (msg) {
+                       console.log(msg);
+                    });*/
+                    /*editNavLink();*/
+                    /*addNavLink();*/
+                    /*deleteNavLink();*/
+
+                    /*getNavLogo(function (logoLink) {
+                     console.log(logoLink);
+                    });*/
+                    getNavbar(function (navbar) {
+                        console.log(navbar)
+                    });
+
+                    /*editSection('test name',{
+                     title: {
+                     ar: "تايتل ",
+                     en: "test title"
+                     },
+                     imageUrl: "#image_url",
+                     content: {
+                     ar: "كونتنت",
+                     en: "test content"
+                     }},
+                     '#testName',function (msg) {
+                     console.log(msg);
+                     });*/
+
+
+                });
+            }
+        }
+
+        window.customElements.define(TestService.is, TestService);
+    </script>
+</dom-module>

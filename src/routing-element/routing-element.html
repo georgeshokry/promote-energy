@@ -1,0 +1,112 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="../public-element/main-element.html">
+<link rel="import" href="../public-element/navbar-element.html">
+<link rel="import" href="../public-element/publicpage-element.html">
+<link rel="import" href="../public-element/publicpartners-element.html">
+
+<link rel="import" href="../admin-element/admin-element.html">
+<link rel="import" href="../admin-element/page-element.html">
+<link rel="import" href="../admin-element/auth-element.html">
+<link rel="import" href="../admin-element/partners-element.html">
+
+<script  src="../../server/auth.js"></script>
+
+<dom-module id="routing-element">
+    <template>
+        <style>
+        </style>
+
+        <!-- app-location binds to the app's URL -->
+        <app-location route="{{route}}"></app-location>
+
+        <!-- this app-route manages the top-level routes -->
+        <app-route
+                route="{{route}}"
+                pattern="/:view"
+                data="{{routeData}}"
+                tail="{{subroute}}"></app-route>
+
+        <!-- iron-pages selects the view based on the active route -->
+        <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
+            <main-element name="" route="{{subroute}}"></main-element>
+            <publicpartners-element name="public-partners" route="{{subroute}}"></publicpartners-element>
+            <public-page-element name="page" route="{{subroute}}"></public-page-element>
+
+            <template is="dom-if" if="[[!_checkUser(routeData.view, 'signin')]]">
+            <auth-element style="height: 100vh;" name="signin" route="{{subroute}}"></auth-element>
+            </template>
+            <template is="dom-if" if="[[_checkUser(routeData.view, 'admin')]]">
+                <admin-element name="admin" route="{{subroute}}"></admin-element>
+            </template>
+            <template is="dom-if" if="[[_checkUser(routeData.view, 'partners')]]">
+            <partners-element name="partners" route="{{subroute}}"></partners-element>
+            </template>
+            <template is="dom-if" if="[[_checkUser(routeData.view, 'page')]]">
+            <page-element name="pageadmin" route="{{subroute}}"></page-element>
+            </template>
+
+        </iron-pages>
+    </template>
+
+    <script>
+        var checkU;
+        class RoutingElement extends Polymer.Element {
+            static get is() {
+                return 'routing-element';
+            }
+
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: 'routing-element'
+                    },
+                };
+            }
+
+            ready() {
+                super.ready();
+
+                getSignedUser(function (assign) {
+                    checkU = assign;
+                });
+            }
+
+            _checkUser(route, page) {
+
+                var cok = document.cookie;
+                console.log(cok);
+
+
+                if (cok === "") {
+
+                    if (route == 'admin' || route == 'partners' || route == 'pageadmin') {
+
+                        window.location = "signin";
+                    }
+                    console.log(false);
+                    return false;
+                } else {
+                    console.log(true);
+                    return true;
+                }
+
+            }
+
+            static get observers() {
+                return [
+                    '_routeChanged(route)'
+                ]
+            }
+
+            _routeChanged(changeRecord) {
+                window.scrollTo(0, 0);
+            }
+        }
+            window.customElements.define(RoutingElement.is, RoutingElement);
+    </script>
+</dom-module>

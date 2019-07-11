@@ -1,0 +1,147 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="/bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="/bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="/bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="/bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="/bower_components/l2t-paper-slider/l2t-paper-slider.html">
+<link rel="import" href="/bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<!--collection of fonts used-->
+<link href="https://fonts.googleapis.com/css?family=Kanit:500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+
+
+<link rel="import" href="/bower_components/granite-bootstrap/granite-bootstrap.html">
+<link rel="import" href="/src/public-element/navbar-element.html">
+<link rel="import" href="/src/admin-element/footer-element.html">
+
+<script src="../../server/pages.js"></script>
+
+
+
+<dom-module id="public-page-element">
+    <template>
+        <style include="granite-bootstrap">
+
+            #pageImageDiv{
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 300px;
+            }
+
+            #pageContentDiv{
+                margin: 40px;
+            }
+
+        </style>
+
+        <!-- app-location binds to the app's URL -->
+        <app-location route="{{route}}"></app-location>
+        <!-- this app-route manages the top-level routes -->
+        <app-route
+                route="{{route}}"
+                pattern="/page/:type/:page_id"
+                data="{{routeData}}"></app-route>
+
+        <navbar-element id="pds"></navbar-element>
+
+        <div id="pageContentDiv" style="background-color: #031829; margin: 0; align-content: center">
+            <div class="row" id="divCover" style$='background-image: url("{{page.image}}"); margin-right: 0; margin-left:0;background-repeat: no-repeat; background-size: 100%; background-position: center;'>
+                <div>
+                    <div class="col-md-4">
+                        <div id="pageImageDiv">
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div style="margin: 100px auto; background-color: #031829; padding: 20px; " >
+
+                    <img id="imgIcon" style="width: 100px; height: 100px;">
+                    <h1 style="font-family: 'Roboto'; font-weight: 400; color: white; display: inline-block;">
+                        {{page.title.en}}
+
+                    </h1>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div  style="width: 100%; padding: 30px; background-color: white">
+            <div style="font-family: 'Roboto';  background-color: white; font-weight: 300; color: #031829; font-size: 20px; margin-right: 50px; margin-left: 50px;" inner-h-t-m-l="{{page.content.en}}"></div>
+        </div>
+
+
+
+        <!--footer and end of homepage-->
+        <footer-element style="margin: 0; padding: 0"></footer-element>
+
+
+
+
+
+
+    </template>
+
+    <script>
+        class PublicPageElement extends Polymer.Element {
+            static get is() {
+                return 'public-page-element';
+            }
+
+            static get properties() {
+                return {
+                    page: {
+                        type: Object
+                    }
+                };
+            }
+
+            static get observers() {
+
+                return [
+                    '_routeChanged(route.page.*)'
+                ]
+            }
+
+            _routeChanged(changeRecord) {
+                if (this.routeData.page_id) {
+                    if (this.routeData.type == "page") {
+
+                        var pageId = this.routeData.page_id;
+                        var boundFunction = (function (gotPage) {
+                            this.page = gotPage;
+                            this.$.imgIcon.style.display = "none";
+                        }).bind(this);
+                        getPage(pageId, boundFunction);
+
+                    } else if (this.routeData.type == "service") {
+
+                        var seviceId = this.routeData.page_id;
+                        var boundFunction = (function (gotService) {
+                            this.page = gotService;
+                            this.$.imgIcon.style.display = "inline-block";
+                            this.$.imgIcon.src = gotService.image;
+                            this.$.divCover.style.backgroundImage = "";
+//                            this.$.divCover.style = "background-size: cover; height: 100%";
+                        }).bind(this);
+
+                        getService(seviceId, boundFunction);
+
+                    }
+                }
+            }
+        }
+        window.customElements.define(PublicPageElement.is, PublicPageElement);
+    </script>
+</dom-module>

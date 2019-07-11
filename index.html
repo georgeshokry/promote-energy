@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/bootstrap-grid.css">
+    <link id="logoTabIcon" rel="icon" href="">
+
+
+
+    <title>promote-energy</title>
+    <meta name="description" content="promote energy app">
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="/src/routing-element/routing-element.html">
+    <link rel="import" href="/src/test_service.html">
+    <style>
+
+
+      .loader{
+
+        align-items: center;
+       max-width: 250px;
+        margin: 0 auto;
+        top: 300px;
+        z-index: -100;
+      }
+      h1 {
+        position: relative;
+        color: rgba(0, 0, 0, .3);
+        font-size: 5em
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script src="/server/db-connection.js"></script>
+
+
+    <div class="loader ">
+
+      <img src="images/logo.png" style="width: 300px;">
+      <h1 data-text="It's loading…">Loading…</h1>
+    </div>
+<div style="position: absolute; top: 0; left: 0; width: 100%">
+  <routing-element ></routing-element>
+</div>
+
+    <script>
+        function getLogoIcon() {
+            firebase.database().ref('/navbar/icon').on('value', function (snapshot_1) {
+                console.log(snapshot_1.val());
+                logoTabIcon = document.getElementById('logoTabIcon');
+                logoTabIcon.href = snapshot_1.val();
+            });
+        }
+        getLogoIcon();
+    </script>
+  </body>
+</html>

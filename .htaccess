@@ -1,0 +1,18 @@
+<FilesMatch "\.php$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+<IfModule mod_rewrite.c>
+  Options +FollowSymLinks -MultiViews -indexes
+  RewriteEngine On
+  RewriteBase /panel/
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule (.*) $contact.php [L]
+
+
+</IfModule>
