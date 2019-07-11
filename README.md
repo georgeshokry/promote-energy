@@ -24,17 +24,17 @@ whole admin edit page:
 ![alt text](https://firebasestorage.googleapis.com/v0/b/intern-4310c.appspot.com/o/promote-energy%2Fwholeadmin.png?alt=media&token=d3d8b193-d77a-4b1a-9f63-40f841be6f13)
 
 
-## Install the Polymer-CLI
+### Install the Polymer-CLI
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
 
-## Viewing Your Application
+### Viewing Your Application
 
 ```
 $ polymer serve
 ```
 
-## Building Your Application
+### Building Your Application
 
 ```
 $ polymer build
