@@ -2,7 +2,7 @@
 An editable html template with admin account
 Using [Polymer 2.0](https://www.polymer-project.org) and [firebase](https://firebase.google.com).
 
-A static template editable in text and picutres for sections and pages using admin account.
+Editable in text and picutres for sections and pages using admin account.
 
 admin login component:
 ![alt text](https://firebasestorage.googleapis.com/v0/b/intern-4310c.appspot.com/o/promote-energy%2Fadmin-login.png?alt=media&token=23b9c71f-9154-4351-bd47-baa7b122f7e7)
